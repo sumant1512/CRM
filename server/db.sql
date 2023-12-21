@@ -3,7 +3,7 @@ use expenses_managment;
 
 CREATE TABLE User_Role(
     id int AUTO_INCREMENT,
-    role_name varchar(100) NOT NULL,
+    role_name ENUM('superadmin', 'admin', 'employee'),
     created_at datetime NOT NULL,
     modified_at datetime NOT NULL,
     PRIMARY KEY (id)
@@ -18,10 +18,12 @@ CREATE TABLE User(
     mobile_number varchar(100) NOT NULL,
     is_active boolean ,
     role_id int,
+    supervisor_id int,
     created_at datetime,
     modified_at datetime,
     PRIMARY KEY (id),
-    FOREIGN KEY (role_id) REFERENCES User_Role(id)
+    FOREIGN KEY (role_id) REFERENCES User_Role(id),
+    FOREIGN KEY (supervisor_id) REFERENCES User(id)
 );
 
 
