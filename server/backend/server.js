@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
-const cartRoutes = require("./routes/cartRoutes");
+const expenseCategory = require("./routes/expenseCategory");
 const cors = require("cors");
 
 const app = express();
@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/cart", cartRoutes);
+app.use("/api/expenseCategory", expenseCategory);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
