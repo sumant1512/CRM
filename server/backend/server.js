@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const productRoutes = require("./routes/productRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseCategory = require("./routes/expenseCategory");
 const cors = require("cors");
@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
   res.json({ message: "API running..." });
 });
 
-app.use("/api/products", productRoutes);
+app.use("/api/expense", expenseRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/expenseCategory", expenseCategory);
 

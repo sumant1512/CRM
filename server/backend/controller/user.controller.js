@@ -71,14 +71,14 @@ const signInUser = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const loginQuery =
-    "SELECT id, first_name, last_name, email, password, role_id, supervisor_id, transaction_count  FROM expenses_managment.user WHERE email=?";
+    "SELECT id, first_name, last_name, email, password, role_id, supervisor_id, transaction_count  FROM expenses_managment.user WHERE email=? and is_active=1";
   try {
     connectDB.query(loginQuery, [email])
     .then(([result]) => {
       if (result.length <= 0) {
         res
           .status(404)
-          .send({ status: false, message: "User is not registered." });
+          .send({ status: false, message: "User is not registered or is Inactive." });
       } else {
         bcrypt
           .compare(password, result[0].password)

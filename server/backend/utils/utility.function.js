@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {JWT} = require('../config/config')
+
 const checkPassword = (password, passwordHash) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {

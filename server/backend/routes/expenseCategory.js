@@ -1,7 +1,7 @@
 const express = require('express')
 const {
   addExpenseCategory,
-  deleteProductInCart,
+  updateExpenseCategory,
   getExpenseCategory,
 } = require('../controller/expenseCategory.controller')
 const {verifyUser} = require('../middleware/middleware')
@@ -11,6 +11,8 @@ router
   .route('/')
   .get([verifyUser], getExpenseCategory)
   .post([verifyUser], addExpenseCategory)
+  .put([verifyUser], updateExpenseCategory)
+
 
 // router.route('/expenseCategory/:id').delete([verifyUser], deleteProductInCart)
 
