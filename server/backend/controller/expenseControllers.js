@@ -39,20 +39,24 @@ const addExpense = async (req, res) => {
     "INSERT INTO expenses_managment.expenses (category_id, user_id, expense_amount, description, archived, created_at, modified_at ) VALUES ((SELECT id FROM expenses_managment.expense_category WHERE category_name = ?), ?, ?, ?, ?, ?, ?)";
     
     const updateWalletQuery = "UPDATE expenses_managment.wallet SET amount = amount - ?,modified_at = NOW() WHERE user_id = ?"
+    
     try {
       const expenseData = [categoryName,user_id,expenseAmount,description,0,currentDateTime,currentDateTime]
       connectDB.query(createExpenseQuery, expenseData)
       .then(([result]) =>{
         console.log(result)
-        const walletData = [expenseAmount,user_id]
-        if (result) {
-          // console.log('Expense Category Name already exists. Please choose another Name.');
-          // return Promise.reject(new Error('Expense Category Name already exists'));
-          // Handle error or inform the user that the email already exists
-          return connectDB.query(updateWalletQuery, walletData);
-        } else {
-          // Email is unique, proceed with insertion
-          return Promise.reject(new Error('Fail to add Expenses.'));
+        if (roleType == "admin"){
+          return result
+        }
+        else{
+          const walletData = [expenseAmount,user_id]
+          if (result) {
+            // Handle error or inform the user that the email already exists
+            return connectDB.query(updateWalletQuery, walletData);
+          } else {
+            // Email is unique, proceed with insertion
+            return Promise.reject(new Error('Fail to add Expenses.'));
+          }
         }
       })
       .then(([result]) => {
