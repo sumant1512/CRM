@@ -1,8 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const productRoutes = require("./routes/productRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
 const userRoutes = require("./routes/userRoutes");
-const cartRoutes = require("./routes/cartRoutes");
+const expenseCategory = require("./routes/expenseCategory");
+const walletRoutes = require("./routes/walletRoutes.js");
+
 const cors = require("cors");
 
 const app = express();
@@ -14,9 +16,11 @@ app.get("/", (req, res) => {
   res.json({ message: "API running..." });
 });
 
-app.use("/api/products", productRoutes);
+app.use("/api/expense", expenseRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/cart", cartRoutes);
+app.use("/api/expenseCategory", expenseCategory);
+app.use("/api/wallet", walletRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
