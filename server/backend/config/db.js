@@ -1,12 +1,12 @@
 require("dotenv").config();
-var mysql = require("mysql2");
+var mysql = require("mysql2/promise");
 
-var connectDB = mysql.createConnection({
+var connectDB = mysql.createPool({
   host: "localhost",
   user: "root",
   port: 3306,
-  password: "admin",
-  database: "shop_now",
+  password: "root",
+  database: "expenses_managment",
 });
 
 // var connection = mysql.createConnection({

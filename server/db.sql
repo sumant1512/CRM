@@ -1,128 +1,80 @@
-create database shop_now;
-use shop_now;
+create database expenses_managment;
+use expenses_managment;
 
-CREATE TABLE Customer (
-    id int AUTO_INCREMENT,
-    first_name varchar(100) NOT NULL,
-    last_name varchar(100) NOT NULL,
-    email varchar(100) NOT NULL,
-    password varchar(100) NOT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE Address (
-    id int AUTO_INCREMENT,
-    address_1 varchar(100) NOT NULL,
-    address_2 varchar(100) NOT NULL,
-    city varchar(100) NOT NULL,
-    state varchar(100) NOT NULL,
-    pincode varchar(100) NOT NULL,
-    country varchar(100) NOT NULL,
-    customer_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES Customer(id)
-);
-
-CREATE TABLE Shipment (
-    id int AUTO_INCREMENT,
-    shipment_date datetime NOT NULL,
-    shipment_address_id int NOT NULL,
-    customer_id int NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (shipment_address_id) REFERENCES Address(id),
-    FOREIGN KEY (customer_id) REFERENCES Customer(id)
-);
-
-CREATE TABLE PaymentMethod (
-    id int AUTO_INCREMENT,
-    name varchar(100) NOT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE PaymentTransactions (
-    id int AUTO_INCREMENT,
-    payment_date varchar(100) NOT NULL,
-    amount varchar(100) NOT NULL,
-    customer_id int,
-    payment_method_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES Customer(id),
-    FOREIGN KEY (payment_method_id) REFERENCES PaymentMethod(id)
-);
-
-CREATE TABLE Category (
-    id int AUTO_INCREMENT,
-    name varchar(100) NOT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE Product (
-    id int AUTO_INCREMENT,
-    sku varchar(100) NOT NULL,
-    description varchar(100) NOT NULL,
-    price decimal(10.2) NOT NULL,
-    stock int NOT NULL,
-    category_id int NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (category_id) REFERENCES Category(id)
-);
-
-CREATE TABLE Cart (
-    id int auto_increment,
-    quantity int,
-    customer_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES Customer(id)
-);
-
-CREATE TABLE CartItems (
-    id int auto_increment,
-    cart_id int,
-    product_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (cart_id) REFERENCES Cart(id),
-    FOREIGN KEY (product_id) REFERENCES Product(id)
-);
-
-CREATE TABLE Wishlist (
-    id int auto_increment,
-    quantity int,
-    customer_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES Customer(id)
-);
-
-CREATE TABLE WishlistItems (
-    id int auto_increment,
-    wishlist_id int,
-    product_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (wishlist_id) REFERENCES Wishlist(id),
-    FOREIGN KEY (product_id) REFERENCES Product(id)
-);
-
-CREATE TABLE Orders (
-    id int auto_increment,
-    order_date datetime not null,
-    total_price decimal(10.2) not null,
-    customer_id int not null,
-    shipment_id int not null,
-    payment_transaction_id int not null,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES Customer(id),
-    FOREIGN KEY (shipment_id) REFERENCES Shipment(id),
-    FOREIGN KEY (payment_transaction_id) REFERENCES PaymentTransactions(id)
-);
-
-CREATE TABLE OrdersItems (
-    id int auto_increment,
-    quantity int NOT NULL,
-    price decimal(10.2) not null,
-    product_id int,
-    order_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (product_id) REFERENCES Product(id),
-    FOREIGN KEY (order_id) REFERENCES Orders(id)
-);
+CREATE TABLE `user_role` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_name` enum('superadmin','admin','employee') DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `modified_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `mobile_number` varchar(100) NOT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `role_id` int DEFAULT NULL,
+  `supervisor_id` int DEFAULT NULL,
+  `transaction_count` int DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `modified_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  KEY `supervisor_id` (`supervisor_id`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`),
+  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`supervisor_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+CREATE TABLE `expense_category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(50) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `modified_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `expenses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `expense_amount` int DEFAULT NULL,
+  `description` varchar(100) NOT NULL,
+  `archived` tinyint(1) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `modified_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `expenses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `expenses_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `expense_category` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+CREATE TABLE `wallet` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `amount` int DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `modified_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `wallet_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO expenses_managment.user_role 
+    (role_name,created_at,modified_at) VALUE ("superadmin","2023-12-21 10:27:21.24","2023-12-21 10:27:21.24"); -- To add superadmin role
+
+INSERT INTO expenses_managment.user_role 
+    (role_name,created_at,modified_at) VALUE ("admin","2023-12-21 10:27:21.24","2023-12-21 10:27:21.24"); -- To add admin role
+
+INSERT INTO expenses_managment.user_role 
+    (role_name,created_at,modified_at) VALUE ("employee","2023-12-21 10:27:21.24","2023-12-21 10:27:21.24"); -- To add employee role

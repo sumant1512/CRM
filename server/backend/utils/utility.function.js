@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {JWT} = require('../config/config')
+
 const checkPassword = (password, passwordHash) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {
@@ -14,7 +15,7 @@ const checkPassword = (password, passwordHash) => {
 }
 
 const newToken = user => {
-  return jwt.sign({id: user._id}, JWT.jwt, {
+  return jwt.sign({id: user.id}, JWT.jwt, {
     expiresIn: JWT.jwtExp,
   })
 }
