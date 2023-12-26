@@ -4,7 +4,8 @@ const {
   getExpense,
   addExpense,
   updateExpense,
-  getExpenseById
+  getExpenseById,
+  deleteExpenseById
 } = require("../controller/expenseControllers");
 const {verifyUser} = require('../middleware/middleware')
 
@@ -15,6 +16,9 @@ router
   .put([verifyUser], updateExpense)
 
 
-router.get("/:id", getExpenseById);
+router.route("/:id")
+    .get([verifyUser], getExpenseById)
+    .delete([verifyUser], deleteExpenseById);
+
 
 module.exports = router;
