@@ -7,7 +7,6 @@ const { sendResponseError,incrementTransactionCount } = require("../middleware/m
 
 
 const getExpenseCategory = async (req, res) => {
-  console.log(req.params.user_id, req.params.admin_id,res)
   const roleType = await incrementTransactionCount(req.query.user_id, req.query.admin_id,res)
   if (roleType == 'admin'){
     const expenseCategoryQuery =
