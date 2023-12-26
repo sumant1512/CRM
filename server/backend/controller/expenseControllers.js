@@ -16,15 +16,45 @@ const getExpense = async (req, res) => {
 };
 
 const getExpenseById = async (req, res) => {
-  console.log(req.params);
-  // try {
-  //   const product = await Product.findById(req.params.id);
+  const expenseId = req.params.user_id
+  const {user_id, admin_id} = req.query;
 
-  //   res.json(product);
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ message: "Server Error" });
-  // }
+  const roleType = await incrementTransactionCount(user_id, admin_id,res)
+
+  if(roleType != "superadmin" ){
+    const expenseUpdateQuery =
+      "SELECT * expenses_managment.expenses  WHERE id = ? and archived = 0";
+      try {
+          const expenseUpdatedData = [categoryName,expenseAmount,description,expenseId] 
+
+          connectDB.query(expenseUpdateQuery,[1,expenseId])
+          .then(([result]) =>{
+            if (result.length <=  0) {
+              
+              // return Promise.reject(new Error('Failed to delete expenses.'));
+              res.status(500).send({ status: false, message: "Failed to fetch expense data."});
+              // Handle error or inform the user that the email already exists
+            } else {
+              res.status(200).send({ status: true, message: "Expense data fetch succesfully.", data: result });
+            }
+          })
+          .catch(err => {
+
+              sendResponseError(500, "Error in fetching expense. Error- "+err.message,res);
+              
+            });
+
+      } catch (err) {
+        sendResponseError(500, "Something went wrong. Please try again");
+        return;
+      }
+
+  }
+  else{
+    res
+      .status(400)
+      .send({ status: false, message: "User is not admin or employee. Feature is only for admin and employee." });
+  }
 };
 
 const addExpense = async (req, res) => {
@@ -95,10 +125,10 @@ const updateExpense = async (req, res) => {
 
   if(roleType != "superadmin"){
 
-    const getExpenseAmountQuery = "SELECT expense_amount FROM expenses_managment.expenses WHERE id = ?"
+    const getExpenseAmountQuery = "SELECT expense_amount FROM expenses_managment.expenses WHERE id = ? and archived = 0"
     const expenseUpdateQuery =
       "UPDATE expenses_managment.expenses SET category_id = (SELECT id FROM expenses_managment.expense_category WHERE category_name = ?),expense_amount =?, description=?, modified_at = NOW() WHERE id = ?";
-    const walletUpdateQuery = "UPDATE expenses_managment.wallet SET amount = amount +? - ?,modified_at = NOW() WHERE user_id = ?"
+    const walletUpdateQuery = "UPDATE expenses_managment.wallet SET amount = amount +? - ?,modified_at = NOW() WHERE user_id = ? "
       try {
       const expenseUpdatedData = [categoryName,expenseAmount,description,expenseId] 
 
@@ -141,7 +171,7 @@ const updateExpense = async (req, res) => {
           }
         });
     } catch (err) {
-      sendResponseError(500, "Something wrong please try again");
+      sendResponseError(500, "Something went wrong. Please try again");
       return;
     }
   }
@@ -153,9 +183,52 @@ const updateExpense = async (req, res) => {
 
 };
 
+const deleteExpenseById = async (req, res) => {
+  const expenseId = req.params.user_id
+  const {user_id, admin_id} = req.body;
+
+  const roleType = await incrementTransactionCount(user_id, admin_id,res)
+
+  if(roleType != "superadmin" && roleType == "admin"){
+    const expenseUpdateQuery =
+      "UPDATE expenses_managment.expenses SET archived = ? WHERE id = ?";
+      try {
+          const expenseUpdatedData = [categoryName,expenseAmount,description,expenseId] 
+
+          connectDB.query(expenseUpdateQuery,[1,expenseId])
+          .then(([result]) =>{
+            if (result.length <=  0) {
+              
+              // return Promise.reject(new Error('Failed to delete expenses.'));
+              res.status(500).send({ status: false, message: "Failed to delete expenses."});
+              // Handle error or inform the user that the email already exists
+            } else {
+              res.status(200).send({ status: true, message: "Expense deleted succesfully." });
+            }
+          })
+          .catch(err => {
+
+              sendResponseError(500, "Error in deleting expense. Error- "+err.message,res);
+              
+            });
+
+      } catch (err) {
+        sendResponseError(500, "Something went wrong. Please try again");
+        return;
+      }
+
+  }
+  else{
+    res
+      .status(400)
+      .send({ status: false, message: "User is not admin or employee. Feature is only for admin and employee." });
+  }
+}
+
 module.exports = {
   getExpense,
   addExpense,
   updateExpense,
-  getExpenseById
+  getExpenseById,
+  deleteExpenseById
 };
