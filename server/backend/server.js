@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const expenseRoutes = require("./routes/expenseRoutes");
-const userRoutes = require("./routes/userRoutes");
-const expenseCategory = require("./routes/expenseCategory");
+const expenseRoutes = require("./routes/expenseRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
+const expenseCategory = require("./routes/expenseCategoryRoutes.js");
 const walletRoutes = require("./routes/walletRoutes.js");
 
 const cors = require("cors");

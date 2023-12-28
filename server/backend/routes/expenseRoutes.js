@@ -6,7 +6,7 @@ const {
   updateExpense,
   getExpenseById,
   deleteExpenseById
-} = require("../controller/expenseControllers");
+} = require("../controller/expense.controllers");
 const {verifyUser} = require('../middleware/middleware')
 
 router

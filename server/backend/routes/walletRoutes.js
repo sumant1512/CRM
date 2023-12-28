@@ -5,7 +5,7 @@ const {
   addwallet,
   updatewallet,
   getwalletById,
-} = require("../controller/walletControllers");
+} = require("../controller/wallet.controllers");
 const {verifyUser} = require('../middleware/middleware')
 
 router

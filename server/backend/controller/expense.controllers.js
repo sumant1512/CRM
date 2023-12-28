@@ -1,33 +1,59 @@
 
-const connectDB = require("./../config/db");
+const connectDB = require("../config/db");
 const { format } = require('date-fns');
 
 const { sendResponseError,incrementTransactionCount } = require("../middleware/middleware");
 
 const getExpense = async (req, res) => {
-  console.log(req);
-  // try {
-  //   const products = await Product.find({});
-  //   res.json(products);
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ message: "Server Error" });
-  // }
+  const {user_id, admin_id} = req.query;
+  const roleType = await incrementTransactionCount(user_id, admin_id,res)
+
+  if(roleType != "superadmin" ){
+    const getAllExpenseQuery =
+      "SELECT ex.id, ex.category_id, ex.user_id, ex.expense_amount, ex.description, user.supervisor_id FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE supervisor_id = ? and archived = 0";
+      try {
+
+          connectDB.query(getAllExpenseQuery,[admin_id])
+          .then(([result]) =>{
+            if (result.length <=  0) {
+              
+              // return Promise.reject(new Error('Failed to delete expenses.'));
+              res.status(500).send({ status: false, message: "Failed to fetch expense data."});
+              // Handle error or inform the user that the email already exists
+            } else {
+              res.status(200).send({ status: true, message: "Expense data fetch succesfully.", data: result });
+            }
+          })
+          .catch(err => {
+              sendResponseError(500, "Error in fetching expense. Error- "+err.message,res);
+              
+            });
+
+      } catch (err) {
+        console.log(err)
+        sendResponseError(500, "Something went wrong. Please try again");
+      }
+
+  }
+  else{
+    res
+      .status(400)
+      .send({ status: false, message: "User is not admin or employee. Feature is only for admin and employee." });
+  }
 };
 
 const getExpenseById = async (req, res) => {
-  const expenseId = req.params.user_id
+  const expenseId = req.params.id
   const {user_id, admin_id} = req.query;
 
   const roleType = await incrementTransactionCount(user_id, admin_id,res)
 
   if(roleType != "superadmin" ){
-    const expenseUpdateQuery =
-      "SELECT * expenses_managment.expenses  WHERE id = ? and archived = 0";
+    const getEachExpenseQuery =
+      "SELECT * FROM expenses_managment.expenses  WHERE id = ? and archived = 0";
       try {
-          const expenseUpdatedData = [categoryName,expenseAmount,description,expenseId] 
 
-          connectDB.query(expenseUpdateQuery,[1,expenseId])
+          connectDB.query(getEachExpenseQuery,[1,expenseId])
           .then(([result]) =>{
             if (result.length <=  0) {
               
@@ -46,7 +72,6 @@ const getExpenseById = async (req, res) => {
 
       } catch (err) {
         sendResponseError(500, "Something went wrong. Please try again");
-        return;
       }
 
   }
@@ -184,18 +209,16 @@ const updateExpense = async (req, res) => {
 };
 
 const deleteExpenseById = async (req, res) => {
-  const expenseId = req.params.user_id
+  const expenseId = req.params.id
   const {user_id, admin_id} = req.body;
 
   const roleType = await incrementTransactionCount(user_id, admin_id,res)
 
   if(roleType != "superadmin" && roleType == "admin"){
-    const expenseUpdateQuery =
-      "UPDATE expenses_managment.expenses SET archived = ? WHERE id = ?";
+    const expenseDeleteQuery =
+      "UPDATE expenses_managment.expenses SET archived = ?,modified_at = NOW() WHERE id = ?";
       try {
-          const expenseUpdatedData = [categoryName,expenseAmount,description,expenseId] 
-
-          connectDB.query(expenseUpdateQuery,[1,expenseId])
+          connectDB.query(expenseDeleteQuery,[1,expenseId])
           .then(([result]) =>{
             if (result.length <=  0) {
               
@@ -213,6 +236,7 @@ const deleteExpenseById = async (req, res) => {
             });
 
       } catch (err) {
+        console.log(err)
         sendResponseError(500, "Something went wrong. Please try again");
         return;
       }
@@ -221,7 +245,7 @@ const deleteExpenseById = async (req, res) => {
   else{
     res
       .status(400)
-      .send({ status: false, message: "User is not admin or employee. Feature is only for admin and employee." });
+      .send({ status: false, message: "User is not admin or employee. Feature is only for admin." });
   }
 }
 

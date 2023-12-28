@@ -14,11 +14,11 @@ const signUpUser = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 8);
     const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     
-    const checkEmailQuery = 'SELECT COUNT(*) as count,transaction_count FROM expenses_managment.user WHERE email = ?';
-    connectDB.query(checkEmailQuery,userData[2])
+    const checkEmailQuery = 'SELECT COUNT(*) as count FROM expenses_managment.user WHERE email = ?';
+    connectDB.query(checkEmailQuery,email)
       .then(([rows]) => {
         const emailExists = rows[0].count > 0;
-        const trans_count = rows[0].transaction_count
+        const trans_count = 0;
 
         const userData = [ firstName, lastName, email, passwordHash, mobileNumber, 1, roleName, supervisorId, trans_count, currentDateTime, currentDateTime ]
         
