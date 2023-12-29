@@ -2,6 +2,21 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {JWT} = require('../config/config')
 
+const crypto = require('crypto');
+
+const generateRandomPassword = (length)  =>{
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|;:,.<>?';
+  let password = '';
+
+  for (let i = 0; i < length; ++i) {
+    const randomIndex = crypto.randomInt(0, charset.length);
+    password += charset[randomIndex];
+  }
+
+  return password;
+}
+
+
 const checkPassword = (password, passwordHash) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {
@@ -28,4 +43,4 @@ const verifyToken = token =>
     })
   })
 
-module.exports = {checkPassword, newToken, verifyToken}
+module.exports = {checkPassword, newToken, verifyToken, generateRandomPassword}
