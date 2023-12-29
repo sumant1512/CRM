@@ -8,7 +8,7 @@ describe('SuperAdminComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SuperAdminComponent]
+      declarations: [SuperAdminComponent],
     });
     fixture = TestBed.createComponent(SuperAdminComponent);
     component = fixture.componentInstance;
