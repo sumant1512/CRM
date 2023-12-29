@@ -34,21 +34,25 @@ const signUpUser = async (req, res) => {
         })
       .then(([result]) =>{
         if (result) {
-          return connectDB.query('INSERT INTO expenses_managment.wallet (user_id,amount) VALUES (?, ?) ', [result.insertId, 0]);
+          return connectDB.query('INSERT IGNORE INTO expenses_managment.wallet (user_id,amount) VALUES (?, ?) ', [result.insertId, 0]);
           }
         else{
           return Promise.reject(new Error('User not registered'));
         }
         })
       .then(([result]) => {
-          if (result) {
+          if (result.affectedRows === 1) {
             res.status(201).send({
               status: true,
               message: "Sucessfully account Register.",
             });
           }
           else{
-            return Promise.reject(new Error('User not registered'));
+            console.log("Wallet already exists for the user.")
+            res.status(201).send({
+              status: true,
+              message: "Sucessfully account Register.",
+            });
           }
           // Proceed with further operations using the user details if needed
         })
