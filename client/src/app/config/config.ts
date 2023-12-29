@@ -9,7 +9,7 @@ const host = isLocalhostActive
 export const AppConfigurations: AppConfigType = {
   api: {
     restaurants: host + '/restaurant',
-    admins: host + '/admins',
+    admins: host + '/api/user/admins',
     addAdmin: host + '/api/user/register',
   },
   featureFlags: {

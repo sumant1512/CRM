@@ -14,18 +14,6 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   fetchAdmins(): Observable<any> {
-    return of([
-      {
-        id: 1,
-        name: 'Swigy',
-        userName: 'swigy',
-        password: '123456',
-        token: 'swigy123456',
-        status: 'Active',
-        createdOn: '12/22/2003',
-        lastUpdatedOn: '12/12/2022',
-      },
-    ]);
     return this.http.get<any>(this.apiUrls.admins).pipe(
       map((response) => {
         if (response) {

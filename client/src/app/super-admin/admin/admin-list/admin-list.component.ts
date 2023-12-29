@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../admin.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-list',
   templateUrl: './admin-list.component.html',
   styleUrls: ['./admin-list.component.scss'],
 })
-export class AdminListComponent {
+export class AdminListComponent implements OnInit {
+  subscription = new Subscription();
   employeeList = [
     {
       id: 1,
@@ -20,4 +23,18 @@ export class AdminListComponent {
       email: 'sumantmishra42@gmail.com',
     },
   ];
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit(): void {
+    this.getAdminList();
+  }
+
+  getAdminList(): void {
+    this.subscription.add(
+      this.adminService.fetchAdmins().subscribe((response) => {
+        console.log(response);
+      })
+    );
+  }
 }
