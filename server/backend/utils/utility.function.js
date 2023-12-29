@@ -1,12 +1,13 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const {JWT} = require('../config/config')
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { JWT } = require("../config/config");
 
-const crypto = require('crypto');
+const crypto = require("crypto");
 
-const generateRandomPassword = (length)  =>{
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|;:,.<>?';
-  let password = '';
+const generateRandomPassword = (length) => {
+  const charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|;:,.<>?";
+  let password = "";
 
   for (let i = 0; i < length; ++i) {
     const randomIndex = crypto.randomInt(0, charset.length);
@@ -14,33 +15,37 @@ const generateRandomPassword = (length)  =>{
   }
 
   return password;
-}
-
+};
 
 const checkPassword = (password, passwordHash) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {
       if (err) {
-        reject(err)
+        reject(err);
       }
 
-      resolve(same)
-    })
-  })
-}
+      resolve(same);
+    });
+  });
+};
 
-const newToken = user => {
-  return jwt.sign({id: user.id}, JWT.jwt, {
+const newToken = (user) => {
+  return jwt.sign({ id: user.id }, JWT.jwt, {
     expiresIn: JWT.jwtExp,
-  })
-}
+  });
+};
 
-const verifyToken = token =>
+const verifyToken = (token) =>
   new Promise((resolve, reject) => {
     jwt.verify(token, JWT.jwt, (err, payload) => {
-      if (err) return reject(err)
-      resolve(payload)
-    })
-  })
+      if (err) return reject(err);
+      resolve(payload);
+    });
+  });
 
-module.exports = {checkPassword, newToken, verifyToken, generateRandomPassword}
+module.exports = {
+  checkPassword,
+  newToken,
+  verifyToken,
+  generateRandomPassword,
+};

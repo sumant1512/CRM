@@ -5,20 +5,19 @@ const {
   addExpense,
   updateExpense,
   getExpenseById,
-  deleteExpenseById
+  deleteExpenseById,
 } = require("../controller/expense.controllers");
-const {verifyUser} = require('../middleware/middleware')
+const { verifyUser } = require("../middleware/middleware");
 
 router
-  .route('/')
+  .route("/")
   .get([verifyUser], getExpense)
   .post([verifyUser], addExpense)
-  .put([verifyUser], updateExpense)
+  .put([verifyUser], updateExpense);
 
-
-router.route("/:id")
-    .get([verifyUser], getExpenseById)
-    .delete([verifyUser], deleteExpenseById);
-
+router
+  .route("/:id")
+  .get([verifyUser], getExpenseById)
+  .delete([verifyUser], deleteExpenseById);
 
 module.exports = router;

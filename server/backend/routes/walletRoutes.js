@@ -6,14 +6,14 @@ const {
   updatewallet,
   getwalletById,
 } = require("../controller/wallet.controllers");
-const {verifyUser} = require('../middleware/middleware')
+const { verifyUser } = require("../middleware/middleware");
 
 router
-      .route("/")
-      .get([verifyUser], getwallet)
-      .post([verifyUser], addwallet)
-      .put([verifyUser], updatewallet);
+  .route("/")
+  .get([verifyUser], getwallet)
+  .post([verifyUser], addwallet)
+  .put([verifyUser], updatewallet);
 
-router.get("/:id",[verifyUser], getwalletById);
+router.get("/:id", [verifyUser], getwalletById);
 
 module.exports = router;
