@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "0dd5a9fe-5375-402d-b766-93225ef55af2",
-		"name": "Expense Managment",
+		"name": "CRM",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31924861"
 	},
@@ -174,7 +174,7 @@
 			]
 		},
 		{
-			"name": "login",
+			"name": "Login",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -683,6 +683,190 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": {\n        \"id\": 6,\n        \"first_name\": \"admin\",\n        \"last_name\": \"second\",\n        \"email\": \"admin3@gmail.com\",\n        \"role_id\": 2,\n        \"supervisor_id\": 1,\n        \"transaction_count\": 0,\n        \"is_verified\": 1\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzAzOTYyNDgxLCJleHAiOjE3MTI2MDI0ODF9.x9B0K3526D4DVFjY7-tQKt0buolxtM4q8w4FofKPY5o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/logout/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"logout",
+						"6"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Logout",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/logout/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"logout",
+								"6"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "43"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2b-anggT95bt3BbmE3z+9ofbAmuUz8\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 30 Dec 2023 19:01:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"User is Logout.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Admins",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzAzOTYyNDgxLCJleHAiOjE3MTI2MDI0ODF9.x9B0K3526D4DVFjY7-tQKt0buolxtM4q8w4FofKPY5o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/admins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"admins"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Admins",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/admins",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"admins"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1118"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"45e-PxjbotWVT5QjBwipypWXZmEAewI\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 30 Dec 2023 19:02:30 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"tester\",\n            \"email\": \"admin@gmail.com\",\n            \"mobileNumber\": \"9856324578\",\n            \"createdAt\": \"2023-12-21T17:11:02.000Z\",\n            \"isActive\": 1,\n            \"isVerified\": null,\n            \"modifiedAt\": \"2023-12-29T16:46:34.000Z\",\n            \"roleId\": 2,\n            \"supervisorId\": null,\n            \"transactionCount\": 93\n        },\n        {\n            \"id\": 5,\n            \"firstName\": \"admin\",\n            \"lastName\": \"second\",\n            \"email\": \"admin2@gmail.com\",\n            \"mobileNumber\": \"9856324578\",\n            \"createdAt\": \"2023-12-29T15:52:36.000Z\",\n            \"isActive\": 1,\n            \"isVerified\": 0,\n            \"modifiedAt\": \"2023-12-29T15:58:08.000Z\",\n            \"roleId\": 2,\n            \"supervisorId\": 1,\n            \"transactionCount\": 0\n        },\n        {\n            \"id\": 6,\n            \"firstName\": \"admin\",\n            \"lastName\": \"second\",\n            \"email\": \"admin3@gmail.com\",\n            \"mobileNumber\": \"9856324578\",\n            \"createdAt\": \"2023-12-29T16:04:23.000Z\",\n            \"isActive\": 1,\n            \"isVerified\": 1,\n            \"modifiedAt\": \"2023-12-30T19:01:22.000Z\",\n            \"roleId\": 2,\n            \"supervisorId\": 1,\n            \"transactionCount\": 0\n        },\n        {\n            \"id\": 7,\n            \"firstName\": \"admin\",\n            \"lastName\": \"second\",\n            \"email\": \"admin4@gmail.com\",\n            \"mobileNumber\": \"9856324578\",\n            \"createdAt\": \"2023-12-29T16:37:22.000Z\",\n            \"isActive\": 0,\n            \"isVerified\": 0,\n            \"modifiedAt\": \"2023-12-29T16:37:22.000Z\",\n            \"roleId\": 2,\n            \"supervisorId\": 1,\n            \"transactionCount\": 0\n        }\n    ]\n}"
 				}
 			]
 		},
@@ -1204,7 +1388,7 @@
 			]
 		},
 		{
-			"name": "getAllExpenses",
+			"name": "Get All Expense",
 			"request": {
 				"method": "GET",
 				"header": [],
