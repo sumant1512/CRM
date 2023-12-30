@@ -8,6 +8,9 @@ export interface ApiType {
   admins: string;
   addAdmin: string;
   activateAdmin: string;
+  employees: string;
+  activateEmployee: string;
+  addEmployee: string;
 }
 
 export interface FeatureFlagType {

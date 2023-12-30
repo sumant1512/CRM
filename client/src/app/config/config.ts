@@ -12,6 +12,9 @@ export const AppConfigurations: AppConfigType = {
     admins: host + '/api/user/admins',
     addAdmin: host + '/api/user/register',
     activateAdmin: host + '/api/user/activate',
+    employees: host + '/api/admin/employees',
+    activateEmployee: host + '/api/admin/activate',
+    addEmployee: host + '/api/admin/register',
   },
   featureFlags: {
     isSearchFilterActive: true,
