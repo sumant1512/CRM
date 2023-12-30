@@ -23,9 +23,7 @@ const registerUser = async (req, res) => {
   const registerQuery =
     "INSERT INTO expenses_managment.user (first_name, last_name, email, password,mobile_number,is_active,role_id,supervisor_id,transaction_count,is_verified, created_at,modified_at ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   try {
-    const randPassword = generateRandomPassword(8);
-    console.log("Random Password- ", randPassword);
-    const passwordHash = await bcrypt.hash(randPassword, 8);
+    const passwordHash = await bcrypt.hash("admin", 8);
     const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
     const checkEmailQuery =
@@ -41,7 +39,7 @@ const registerUser = async (req, res) => {
           email,
           passwordHash,
           mobileNumber,
-          is_active,
+          0,
           roleId,
           supervisorId,
           trans_count,
@@ -75,14 +73,14 @@ const registerUser = async (req, res) => {
           res.status(201).send({
             status: true,
             message: "Sucessfully account Register.",
-            data: { password: randPassword },
+            data: {},
           });
         } else {
           console.log("Wallet already exists for the user.");
           res.status(201).send({
             status: true,
             message: "Sucessfully account Register.",
-            data: { password: randPassword },
+            data: {},
           });
         }
         // Proceed with further operations using the user details if needed
@@ -110,12 +108,10 @@ const loginUser = async (req, res) => {
       .query(loginQuery, [email])
       .then(([result]) => {
         if (result.length <= 0) {
-          res
-            .status(404)
-            .send({
-              status: false,
-              message: "User is not registered or is Inactive.",
-            });
+          res.status(404).send({
+            status: false,
+            message: "User is not registered or is Inactive.",
+          });
         } else {
           bcrypt
             .compare(password, result[0].password)
@@ -164,6 +160,39 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getAllAdmin = async (req, res) => {
+  const getAdminQuery =
+    "SELECT id, first_name as firstName, last_name as lastName, email, mobile_number as mobileNumber, created_at as createdAt, is_active as isActive, is_verified as isVerified, modified_at as modifiedAt, role_id as roleId, supervisor_id as supervisorId, transaction_count as transactionCount FROM user WHERE role_id=2";
+  try {
+    connectDB
+      .query(getAdminQuery)
+      .then(([result]) => {
+        if (result.length <= 0) {
+          res
+            .status(404)
+            .send({ status: false, message: "No admin registered." });
+        } else {
+          delete result[0].password;
+          res.status(200).send({
+            status: false,
+            message: "User data fetched succesfully.",
+            data: result,
+          });
+        }
+      })
+      .catch((err) => {
+        sendResponseError(
+          500,
+          "Unable to fetch admin data.. Error- " + err.message,
+          res
+        );
+      });
+  } catch (err) {
+    sendResponseError(500, "Something wrong please try again");
+    return;
+  }
+};
+
 const getAllUser = async (req, res) => {
   const { user_id, admin_id } = req.body;
 
@@ -185,13 +214,11 @@ const getAllUser = async (req, res) => {
             const response = {
               result,
             };
-            res
-              .status(200)
-              .send({
-                status: false,
-                message: "User data fetched succesfully.",
-                data: response,
-              });
+            res.status(200).send({
+              status: false,
+              message: "User data fetched succesfully.",
+              data: response,
+            });
           }
         })
         .catch((err) => {
@@ -206,12 +233,10 @@ const getAllUser = async (req, res) => {
       return;
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin.",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin.",
+    });
   }
 };
 
@@ -237,13 +262,11 @@ const getUserById = async (req, res) => {
             const response = {
               ...result[0],
             };
-            res
-              .status(200)
-              .send({
-                status: false,
-                message: "User data fetched succesfully.",
-                data: response,
-              });
+            res.status(200).send({
+              status: false,
+              message: "User data fetched succesfully.",
+              data: response,
+            });
           }
         })
         .catch((err) => {
@@ -258,21 +281,20 @@ const getUserById = async (req, res) => {
       return;
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin.",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin.",
+    });
   }
 };
 
 const activateUser = async (req, res) => {
   const user_id = req.params.id;
+  const adminStatus = req.body.status;
 
   const userActiveQuery =
     "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=?";
-  userActiveData = [1, user_id];
+  userActiveData = [adminStatus, user_id];
 
   try {
     connectDB.query(userActiveQuery, userActiveData).then(([result]) => {
@@ -362,6 +384,7 @@ const resetPassword = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  getAllAdmin,
   getAllUser,
   activateUser,
   resetPassword,

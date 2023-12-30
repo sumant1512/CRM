@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
 import { Subscription } from 'rxjs';
+import { IAdmins } from '../admin.interface';
 
 @Component({
   selector: 'app-admin-list',
@@ -9,20 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class AdminListComponent implements OnInit {
   subscription = new Subscription();
-  employeeList = [
-    {
-      id: 1,
-      firstName: 'Sumant',
-      lastName: 'Mishra',
-      email: 'sumantmishra43@gmail.com',
-    },
-    {
-      id: 2,
-      firstName: 'Sumit',
-      lastName: 'Mishra',
-      email: 'sumantmishra42@gmail.com',
-    },
-  ];
+  adminList: Array<IAdmins> = [];
 
   constructor(private adminService: AdminService) {}
 
@@ -30,10 +18,21 @@ export class AdminListComponent implements OnInit {
     this.getAdminList();
   }
 
+  upateStatus(status: number, adminId: number): void {
+    this.subscription.add(
+      this.adminService
+        .updateAdminStatus(status, adminId)
+        .subscribe((response) => {
+          console.log(response);
+        })
+    );
+  }
+
   getAdminList(): void {
     this.subscription.add(
       this.adminService.fetchAdmins().subscribe((response) => {
-        console.log(response);
+        this.adminList = response;
+        console.log(this.adminList);
       })
     );
   }

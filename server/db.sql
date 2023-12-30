@@ -17,7 +17,8 @@ CREATE TABLE `user` (
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `mobile_number` varchar(100) NOT NULL,
-  `is_active` tinyint(1) DEFAULT NULL,
+  `is_active` boolean DEFAULT NULL,
+  `is_verified` boolean DEFAULT NULL,
   `role_id` int DEFAULT NULL,
   `supervisor_id` int DEFAULT NULL,
   `transaction_count` int DEFAULT NULL,
@@ -78,3 +79,5 @@ INSERT INTO expenses_managment.user_role
 
 INSERT INTO expenses_managment.user_role 
     (role_name,created_at,modified_at) VALUE ("employee","2023-12-21 10:27:21.24","2023-12-21 10:27:21.24"); -- To add employee role
+    
+select * from user;
