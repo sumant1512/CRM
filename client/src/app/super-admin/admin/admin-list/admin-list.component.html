@@ -1,31 +1,57 @@
 <div class="accordion" id="accordionExample">
-  <div *ngFor="let employee of employeeList" class="accordion-item">
+  <div *ngFor="let admin of adminList" class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
       <button
         class="accordion-button"
         type="button"
         data-bs-toggle="collapse"
-        [attr.data-bs-target]="'#collapse' + employee.id"
-        aria-expanded="false"
-        [attr.aria-controls]="'#collapse' + employee.id"
+        [attr.data-bs-target]="'#collapse' + admin.id"
+        aria-expanded="true"
+        [attr.aria-controls]="'#collapse' + admin.id"
       >
-        {{ employee.firstName }} {{ employee.lastName }}
+        {{ admin.firstName }} {{ admin.lastName }}
       </button>
     </h2>
     <div
-      [id]="'collapse' + employee.id"
+      [id]="'collapse' + admin.id"
       class="accordion-collapse collapse hide"
       aria-labelledby="headingOne"
       data-bs-parent="#accordionExample"
     >
       <div class="accordion-body">
-        <strong>This is the first item's accordion body.</strong> It is shown by
-        default, until the collapse plugin adds the appropriate classes that we
-        use to style each element. These classes control the overall appearance,
-        as well as the showing and hiding via CSS transitions. You can modify
-        any of this with custom CSS or overriding our default variables. It's
-        also worth noting that just about any HTML can go within the
-        <code>.accordion-body</code>, though the transition does limit overflow.
+        <div class="row">
+          <div class="col-6 fw-bold">Email:</div>
+          <div class="col-6">{{ admin.email }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Mobile:</div>
+          <div class="col-6">{{ admin.mobileNumber }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Status:</div>
+          <div class="col-6">
+            {{ admin.isActive ? "Active" : "Inactive" }}
+            <a
+              class="link cursor-pointer ms-4"
+              (click)="upateStatus(admin.isActive ? 0 : 1, admin.id)"
+              >{{ admin.isActive ? "Deactivate" : "Activate" }}</a
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Transactions:</div>
+          <div class="col-6">{{ admin.transactionCount }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Verification:</div>
+          <div class="col-6">
+            {{ admin.isVerified ? "Verified" : "Not Verified" }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Registered On:</div>
+          <div class="col-6">{{ admin.createdAt | date : "longDate" }}</div>
+        </div>
       </div>
     </div>
   </div>

@@ -6,14 +6,16 @@ const {
   getUserById,
   activateUser,
   resetPassword,
+  getAllAdmin,
 } = require("../controller/user.controller");
 const { verifyUser } = require("../middleware/middleware");
 const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.get("/admins", getAllAdmin);
 
-router.route("/activate/:id").get([verifyUser], activateUser);
+router.route("/activate/:id").put([verifyUser], activateUser);
 
 router.route("/reset-password").post([verifyUser], resetPassword);
 

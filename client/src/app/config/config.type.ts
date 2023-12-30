@@ -4,9 +4,10 @@ export interface AppConfigType {
 }
 
 export interface ApiType {
-  restaurants: string;
+  login: string;
   admins: string;
   addAdmin: string;
+  activateAdmin: string;
 }
 
 export interface FeatureFlagType {
