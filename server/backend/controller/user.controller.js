@@ -101,63 +101,77 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  
   const loginQuery =
     "SELECT id, first_name, last_name, email, password, role_id, supervisor_id, transaction_count,is_verified  FROM expenses_managment.user WHERE email=? and is_active=1";
-  try {
-    connectDB
-      .query(loginQuery, [email])
-      .then(([result]) => {
-        if (result.length <= 0) {
-          res.status(404).send({
-            status: false,
-            message: "User is not registered or is Inactive.",
-          });
-        } else {
-          bcrypt
-            .compare(password, result[0].password)
-            .then(function (isAuthinticated) {
-              if (isAuthinticated) {
-                const authToken = newToken(result[0]);
-                delete result[0].password;
-                delete result[0].is_verified;
-                if (result[0].is_verified == 0) {
-                  delete result[0].first_name;
-                  delete result[0].last_name;
-                  delete result[0].transaction_count;
-                  delete result[0].role_id;
-                  delete result[0].supervisor_id;
-                  var response = {
-                    ...result[0],
-                    authToken: authToken,
-                  };
-                } else {
-                  var response = {
-                    ...result[0],
-                    authToken: authToken,
-                  };
-                }
-                res.status(200).send({ status: true, data: response });
-              } else {
-                res.status(401).send({
-                  status: false,
-                  message: "Incorrect Email or Password.",
-                });
-              }
+  const updateLoginLoggedQuery =
+    "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
+  
+  
+    try {
+      connectDB.query(loginQuery, [email])
+        .then(([result]) => {
+          if (result.length <= 0) {
+            return res.status(404).send({
+              status: false,
+              message: "User is not registered or is Inactive.",
             });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send({
-          status: false,
-          message: "Error in Logging in. Please try after some time",
+          } else {
+            return bcrypt.compare(password, result[0].password)
+              .then(function (isAuthenticated) {
+                if (isAuthenticated) {
+                  const authToken = newToken(result[0]);
+                  delete result[0].password;
+                  delete result[0].is_verified;
+    
+                  if (result[0].is_verified == 0) {
+                    delete result[0].first_name;
+                    delete result[0].last_name;
+                    delete result[0].transaction_count;
+                    delete result[0].role_id;
+                    delete result[0].supervisor_id;
+                  }
+    
+                  return connectDB.query(updateLoginLoggedQuery, [1, result[0].id])
+                    .then(([updateResult]) => {
+                      return { updateResult, authToken, response: result[0] };
+                    });
+                } else {
+                  return res.status(401).send({
+                    status: false,
+                    message: "Incorrect Email or Password.",
+                  });
+                }
+              });
+          }
+        })
+        .then(({ updateResult, authToken, response }) => {
+          if (updateResult && updateResult.affectedRows === 1) {
+            return res.status(200).send({
+              status: true,
+              message: "User logged in successfully",
+              data: response,
+              authToken: authToken,
+            });
+          } else {
+            return res.status(404).send({
+              status: false,
+              message: "Unable to update the login status.",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).send({
+            status: false,
+            message: "Error in Logging in. Please try after some time",
+          });
         });
-      });
-  } catch (err) {
-    console.log("Error : ", err);
-    sendResponseError(500, "Something wrong please try again");
-    return;
-  }
+    } catch (err) {
+      console.log("Error : ", err);
+      return res.status(500).send("Something wrong, please try again");
+    }
+    
 };
 
 const getAllAdmin = async (req, res) => {
@@ -295,15 +309,15 @@ const activateUser = async (req, res) => {
   const userActiveQuery =
     "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=?";
   userActiveData = [adminStatus, user_id];
-
+  console.log(userActiveData)
   try {
     connectDB.query(userActiveQuery, userActiveData).then(([result]) => {
       if (result.length <= 0) {
         res
           .status(404)
-          .send({ status: false, message: "Unable to Activate User." });
+          .send({ status: false, message: "Unable to change user status." });
       } else {
-        res.status(200).send({ status: true, message: "User is activate." });
+        res.status(200).send({ status: true, message: "User is status changes." });
       }
     });
   } catch (err) {
@@ -338,7 +352,7 @@ const resetPassword = async (req, res) => {
               console.log("isAuthenticated", isAuthenticated);
               if (isAuthenticated) {
                 console.log("here !!", resetPasswordData);
-                return connectDB.query(resetPasswordQuery, resetPasswordData);
+                return connectDB.query(resetPasswordQuery, resetPasswordData)
               } else {
                 res.status(401).send({
                   status: false,
@@ -381,6 +395,29 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  const user_id = req.params.id;
+
+  const userLogoutQuery =
+    "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
+  userLogoutData = [0, user_id];
+
+  try {
+    connectDB.query(userLogoutQuery, userLogoutData).then(([result]) => {
+      if (result.length <= 0) {
+        res
+          .status(404)
+          .send({ status: false, message: "Unable to logout user." });
+      } else {
+        res.status(200).send({ status: true, message: "User logged in session ends." });
+      }
+    });
+  } catch (err) {
+    console.log("Error : ", err);
+    sendResponseError(500, "Something wrong please try again");
+    return;
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
@@ -389,4 +426,5 @@ module.exports = {
   activateUser,
   resetPassword,
   getUserById,
+  logout
 };
