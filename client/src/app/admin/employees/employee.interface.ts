@@ -4,6 +4,7 @@ export interface IAddEmployeeRequestBody {
   email: string;
   mobileNumber: string;
   roleId: number;
+  adminId?: number;
 }
 
 export interface IEmployees extends IAddEmployeeRequestBody {
@@ -12,7 +13,5 @@ export interface IEmployees extends IAddEmployeeRequestBody {
   isActive: number;
   isVerified: number;
   modifiedAt: string;
-  roleId: number;
-  supervisorId?: number;
-  transactionCount: number;
+  transactionCount?: number;
 }

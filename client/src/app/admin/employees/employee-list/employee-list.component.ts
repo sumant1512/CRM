@@ -18,6 +18,15 @@ export class EmployeeListComponent implements OnInit {
     this.getEmployeeList();
   }
 
+  getEmployeeList(): void {
+    this.subscription.add(
+      this.employeeService.fetchEmployees().subscribe((response: any) => {
+        this.employeeList = response;
+        console.log(this.employeeList);
+      })
+    );
+  }
+
   upateStatus(status: number, employeeId: number): void {
     this.subscription.add(
       this.employeeService
@@ -25,15 +34,6 @@ export class EmployeeListComponent implements OnInit {
         .subscribe((response: any) => {
           console.log(response);
         })
-    );
-  }
-
-  getEmployeeList(): void {
-    this.subscription.add(
-      this.employeeService.fetchEmployees().subscribe((response: any) => {
-        this.employeeList = response;
-        console.log(this.employeeList);
-      })
     );
   }
 }

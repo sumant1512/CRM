@@ -8,7 +8,6 @@ const sendResponseError = (statusCode, msg, res) => {
 
 const verifyUser = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(authorization)
   if (!authorization) {
     sendResponseError(400, "You are not authorized ", res);
     return;
@@ -19,15 +18,15 @@ const verifyUser = async (req, res, next) => {
 
   try {
     const payload = await verifyToken(authorization.split(" ")[1]);
-    console.log(payload)
+    console.log(payload);
     if (payload) {
       const checkUserQuery =
         "SELECT COUNT(*) as count FROM expenses_managment.user WHERE id = ? and logged_in = ?";
       connectDB
-        .query(checkUserQuery, [payload["id"],1])
+        .query(checkUserQuery, [payload["id"], 1])
         .then(([rows]) => {
           const userExists = rows[0].count > 0;
-          
+
           if (!userExists) {
             sendResponseError(400, `Login to use the service`, res);
           } else {

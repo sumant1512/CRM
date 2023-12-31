@@ -14,7 +14,7 @@ export class AddEmployeeComponent {
 
   registerEmployee(): void {
     this.employeeService
-      .addEmployee(this.addEmployeeForm.value)
+      .addEmployee({ ...this.addEmployeeForm.value, adminId: 7 })
       .subscribe((response) => {
         console.log(response);
       });

@@ -11,6 +11,7 @@ export const AppConfigurations: AppConfigType = {
     login: host + '/api/user/login',
     admins: host + '/api/user/admins',
     addAdmin: host + '/api/user/register',
+    category: host + '/api/user/expenseCategory',
     activateAdmin: host + '/api/user/activate',
     employees: host + '/api/admin/employees',
     activateEmployee: host + '/api/admin/activate',

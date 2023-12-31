@@ -1,0 +1,18 @@
+<div class="container table-responsive py-5">
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categoryList">
+        <th scope="row">{{ category.id }}</th>
+        <td>{{ category.categoryName }}</td>
+        <td><i class="fa fa-trash-o me-4"></i><i class="fa fa-edit"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
