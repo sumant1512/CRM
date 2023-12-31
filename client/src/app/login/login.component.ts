@@ -29,19 +29,26 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  signUp(): void {
+    alert('Please contact 9579310997');
+  }
+
+  forgetPw(): void {
+    alert('Please contact 9579310997');
+  }
+
   onSubmit(): void {
     const { email, password } = this.form;
 
     this.authService.login(email, password).subscribe({
       next: (response) => {
         console.log(response);
-        this.tokenStorage.saveToken(response.data.authToken);
+        this.tokenStorage.saveToken(response.authToken);
         this.tokenStorage.saveUser(response.data);
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
       },
       error: (err) => {
         this.errorMessage = err.error.message;

@@ -11,7 +11,19 @@
         <a [routerLink]="['employees']"><i class="fa fa-user"></i>Employees</a>
       </li>
       <li>
+        <a [routerLink]="['category']"
+          ><i class="fa fa-user"></i>Expense Category</a
+        >
+      </li>
+      <li>
         <a [routerLink]="['expense']"><i class="fa fa-user"></i>Expenses</a>
+      </li>
+
+      <li>
+        <a [routerLink]="['wallet']"><i class="fa fa-user"></i>Wallet</a>
+      </li>
+      <li>
+        <a (click)="logout()"><i class="fa fa-user"></i>Logout</a>
       </li>
     </ul>
   </aside>
