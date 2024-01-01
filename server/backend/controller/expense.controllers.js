@@ -12,7 +12,7 @@ const getExpense = async (req, res) => {
 
   if (roleType != "superadmin") {
     const getAllExpenseQuery =
-      "SELECT ex.id, ex.category_id, ex.user_id, ex.expense_amount, ex.description, user.supervisor_id FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE supervisor_id = ? and archived = 0";
+      "SELECT ex.id, ex.category_id, ex.user_id, ex.expense_amount, ex.description, user.admin_id FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE admin_id = ? and archived = 0";
     try {
       connectDB
         .query(getAllExpenseQuery, [admin_id])

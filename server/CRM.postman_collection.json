@@ -268,7 +268,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"data\": {\n        \"id\": 4,\n        \"first_name\": \"testuser 2\",\n        \"last_name\": \"tester\",\n        \"email\": \"test2@gmail.com\",\n        \"role_id\": 3,\n        \"supervisor_id\": 1,\n        \"transaction_count\": 0,\n        \"authToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAzODY1MzM5LCJleHAiOjE3MTI1MDUzMzl9.jQx90m2e0baEeR-r5KIEDBUDS0HVcGwMYkiXH-P3l8s\"\n    }\n}"
+					"body": "{\n    \"status\": true,\n    \"data\": {\n        \"id\": 4,\n        \"first_name\": \"testuser 2\",\n        \"last_name\": \"tester\",\n        \"email\": \"test2@gmail.com\",\n        \"role_id\": 3,\n        \"admin_id\": 1,\n        \"transaction_count\": 0,\n        \"authToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAzODY1MzM5LCJleHAiOjE3MTI1MDUzMzl9.jQx90m2e0baEeR-r5KIEDBUDS0HVcGwMYkiXH-P3l8s\"\n    }\n}"
 				}
 			]
 		},
@@ -682,7 +682,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": {\n        \"id\": 6,\n        \"first_name\": \"admin\",\n        \"last_name\": \"second\",\n        \"email\": \"admin3@gmail.com\",\n        \"role_id\": 2,\n        \"supervisor_id\": 1,\n        \"transaction_count\": 0,\n        \"is_verified\": 1\n    }\n}"
+					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": {\n        \"id\": 6,\n        \"first_name\": \"admin\",\n        \"last_name\": \"second\",\n        \"email\": \"admin3@gmail.com\",\n        \"role_id\": 2,\n        \"admin_id\": 1,\n        \"transaction_count\": 0,\n        \"is_verified\": 1\n    }\n}"
 				}
 			]
 		},
@@ -1484,7 +1484,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": null,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"supervisor_id\": 1\n        },\n        {\n            \"id\": 4,\n            \"category_id\": 11,\n            \"user_id\": 4,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"supervisor_id\": 1\n        }\n    ]\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": null,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"admin_id\": 1\n        },\n        {\n            \"id\": 4,\n            \"category_id\": 11,\n            \"user_id\": 4,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"admin_id\": 1\n        }\n    ]\n}"
 				}
 			]
 		},

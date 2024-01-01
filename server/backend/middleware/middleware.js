@@ -8,7 +8,6 @@ const sendResponseError = (statusCode, msg, res) => {
 
 const verifyUser = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(authorization)
   if (!authorization) {
     sendResponseError(400, "You are not authorized ", res);
     return;
@@ -19,7 +18,7 @@ const verifyUser = async (req, res, next) => {
 
   try {
     const payload = await verifyToken(authorization.split(" ")[1]);
-    console.log(payload)
+
     if (payload) {
       const checkUserQuery =
         "SELECT COUNT(*) as count FROM expenses_managment.user WHERE id = ? and logged_in = ?";

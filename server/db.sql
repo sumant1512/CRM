@@ -19,7 +19,7 @@ CREATE TABLE `user` (
   `mobile_number` varchar(100) NOT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
   `role_id` int DEFAULT NULL,
-  `supervisor_id` int DEFAULT NULL,
+  `admin_id` int DEFAULT NULL,
   `transaction_count` int DEFAULT NULL,
   `is_verified` tinyint DEFAULT NULL,
   `logged_in` tinyint DEFAULT NULL,
@@ -27,9 +27,9 @@ CREATE TABLE `user` (
   `modified_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
-  KEY `supervisor_id` (`supervisor_id`),
+  KEY `admin_id` (`admin_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`),
-  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`supervisor_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
