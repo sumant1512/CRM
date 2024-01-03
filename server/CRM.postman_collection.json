@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"firstName\":\"admin\",\r\n\"lastName\":\"second\",\r\n\"email\":\"admin4@gmail.com\",\r\n\"mobileNumber\":\"9856324578\",\r\n\"roleId\":2,//superadmin -1,admin - 2,employee - 3\r\n\"supervisorId\":1 \r\n\r\n// password is in response is tempory\r\n}",
+					"raw": "{\"firstName\":\"testadmin\",\r\n\"lastName\":\"admin\",\r\n\"email\":\"admin.main@gmail.com\",\r\n\"mobileNumber\":\"9856324578\",\r\n\"roleId\":2,//superadmin -1,admin - 2,employee - 3\r\n\"adminId\":2 \r\n// password is in response is tempory\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,81 +36,13 @@
 			},
 			"response": [
 				{
-					"name": "SignUp",
+					"name": "Register",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"firstName\":\"admin\",\r\n\"lastName\":\"second\",\r\n\"email\":\"admin2@gmail.com\",\r\n\"mobileNumber\":\"9856324578\",\r\n\"roleId\":2,//superadmin -1,admin - 2,employee - 3\r\n\"supervisorId\":1}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/user/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"user",
-								"register"
-							]
-						}
-					},
-					"status": "Internal Server Error",
-					"code": 500,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "98"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"62-uMR3AYZKLqkVSudmfxZVot7P/lk\""
-						},
-						{
-							"key": "Date",
-							"value": "Fri, 29 Dec 2023 15:53:36 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": false,\n    \"message\": \"User not registered. Please check error - Error: Email already exists\"\n}"
-				},
-				{
-					"name": "SignUp",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"firstName\":\"admin\",\r\n\"lastName\":\"second\",\r\n\"email\":\"admin4@gmail.com\",\r\n\"mobileNumber\":\"9856324578\",\r\n\"roleId\":2,//superadmin -1,admin - 2,employee - 3\r\n\"supervisorId\":1 \r\n\r\n// password is in response is tempory\r\n}",
+							"raw": "{\"firstName\":\"testadmin\",\r\n\"lastName\":\"admin\",\r\n\"email\":\"admin.main@gmail.com\",\r\n\"mobileNumber\":\"9856324578\",\r\n\"roleId\":2,//superadmin -1,admin - 2,employee - 3\r\n\"adminId\":2 \r\n// password is in response is tempory\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -149,15 +81,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "88"
+							"value": "67"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"58-VCxU8maLcw0jjsR/e43pAYLNsFo\""
+							"value": "W/\"43-X9Mk0cxiB/SN905AnZEudEOxO9s\""
 						},
 						{
 							"key": "Date",
-							"value": "Fri, 29 Dec 2023 16:37:22 GMT"
+							"value": "Wed, 03 Jan 2024 03:37:59 GMT"
 						},
 						{
 							"key": "Connection",
@@ -169,7 +101,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Sucessfully account Register.\",\n    \"data\": {\n        \"password\": \"7MPsB(Y.\"\n    }\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Sucessfully account Register.\",\n    \"data\": {}\n}"
 				}
 			]
 		},
@@ -180,7 +112,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"email\":\"test@gmail.com\",\r\n\"password\":\"test@123\"\r\n}",
+					"raw": "{\r\n\"email\":\"user1@gmail.com\",\r\n\"password\":\"admin\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -188,7 +120,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/user/signin",
+					"raw": "http://localhost:3000/api/user/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -197,7 +129,7 @@
 					"path": [
 						"api",
 						"user",
-						"signin"
+						"login"
 					]
 				}
 			},
@@ -268,27 +200,36 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"data\": {\n        \"id\": 4,\n        \"first_name\": \"testuser 2\",\n        \"last_name\": \"tester\",\n        \"email\": \"test2@gmail.com\",\n        \"role_id\": 3,\n        \"admin_id\": 1,\n        \"transaction_count\": 0,\n        \"authToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAzODY1MzM5LCJleHAiOjE3MTI1MDUzMzl9.jQx90m2e0baEeR-r5KIEDBUDS0HVcGwMYkiXH-P3l8s\"\n    }\n}"
+					"body": "{\n    \"status\": true,\n    \"data\": {\n        \"id\": 4,\n        \"first_name\": \"testuser 2\",\n        \"last_name\": \"tester\",\n        \"email\": \"test2@gmail.com\",\n        \"role_id\": 3,\n        \"supervisor_id\": 1,\n        \"transaction_count\": 0,\n        \"authToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAzODY1MzM5LCJleHAiOjE3MTI1MDUzMzl9.jQx90m2e0baEeR-r5KIEDBUDS0HVcGwMYkiXH-P3l8s\"\n    }\n}"
 				}
 			]
 		},
 		{
-			"name": "Activate User",
+			"name": "Update User Status",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzAzMTk2MzgzLCJleHAiOjE3MTE4MzYzODN9.ggIezGcC8sXc9PyygURHc9yrbLcYnmoEJSrbXKMxtS8",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzAzOTY0MzEwLCJleHAiOjE3MTI2MDQzMTB9.lSbvEYJBjIxFdiDrmVQOzwEJTry9ZLm17v3pQgFAQgo",
 							"type": "string"
 						}
 					]
 				},
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\":1,\r\n    \"adminId\":7 // use for employee only\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:3000/api/user/activate/5",
+					"raw": "http://localhost:3000/api/user/activate/8",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -298,7 +239,7 @@
 						"api",
 						"user",
 						"activate",
-						"5"
+						"8"
 					]
 				}
 			},
@@ -382,7 +323,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"admin3@gmail.com\",\r\n    \"new_password\":\"test@123\",\r\n    \"old_password\":\"aCi16yI@\"\r\n}",
+					"raw": "{\r\n    \"email\":\"admin5@gmail.com\",\r\n    \"new_password\":\"test@12345\",\r\n    \"old_password\":\"test@1234\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -682,7 +623,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": {\n        \"id\": 6,\n        \"first_name\": \"admin\",\n        \"last_name\": \"second\",\n        \"email\": \"admin3@gmail.com\",\n        \"role_id\": 2,\n        \"admin_id\": 1,\n        \"transaction_count\": 0,\n        \"is_verified\": 1\n    }\n}"
+					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": {\n        \"id\": 6,\n        \"first_name\": \"admin\",\n        \"last_name\": \"second\",\n        \"email\": \"admin3@gmail.com\",\n        \"role_id\": 2,\n        \"supervisor_id\": 1,\n        \"transaction_count\": 0,\n        \"is_verified\": 1\n    }\n}"
 				}
 			]
 		},
@@ -1484,7 +1425,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": null,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"admin_id\": 1\n        },\n        {\n            \"id\": 4,\n            \"category_id\": 11,\n            \"user_id\": 4,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"admin_id\": 1\n        }\n    ]\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": null,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"supervisor_id\": 1\n        },\n        {\n            \"id\": 4,\n            \"category_id\": 11,\n            \"user_id\": 4,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"supervisor_id\": 1\n        }\n    ]\n}"
 				}
 			]
 		},
