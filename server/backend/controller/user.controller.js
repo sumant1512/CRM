@@ -13,7 +13,7 @@ const {
 } = require("../utils/utility.function");
 
 const registerUser = async (req, res) => {
-  const { firstName, lastName, email, mobileNumber, roleId, supervisorId } =
+  const { firstName, lastName, email, mobileNumber, roleId, adminId } =
     req.body;
   if (roleId == 2) {
     var expectedRoleId = 1;
@@ -29,11 +29,11 @@ const registerUser = async (req, res) => {
     const checkRoleIdQuery =
       "SELECT role_id FROM expenses_managment.user WHERE id=? and role_id =? ";
     connectDB
-      .query(checkRoleIdQuery, [supervisorId, expectedRoleId])
-      .then(([result]) => {
+      .query(checkRoleIdQuery, [adminId, expectedRoleId])
+      .then(async ([result]) => {
         console.log(result);
         if (result.length > 0) {
-          const passwordHash = bcrypt.hash("admin", 8);
+          const passwordHash = await bcrypt.hash("admin", 8);
           const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
           const checkEmailQuery =
@@ -51,7 +51,7 @@ const registerUser = async (req, res) => {
                 mobileNumber,
                 0,
                 roleId,
-                supervisorId,
+                adminId,
                 trans_count,
                 0,
                 currentDateTime,
@@ -122,7 +122,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const loginQuery =
-    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount,is_verified as isVerified  FROM expenses_managment.user WHERE email=? and is_active=1";
+    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount,is_verified as isVerified, is_active as isActive  FROM expenses_managment.user WHERE email=?";
   const updateLoginLoggedQuery =
     "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
 
@@ -133,34 +133,62 @@ const loginUser = async (req, res) => {
         if (result.length <= 0) {
           return res.status(404).send({
             status: false,
-            message: "User is not registered or is Inactive.",
+            message: "User is not registered",
           });
         } else {
-          return bcrypt
-            .compare(password, result[0].password)
-            .then(function (isAuthenticated) {
-              if (isAuthenticated) {
-                const authToken = newToken(result[0]);
-                delete result[0].password;
-                
-                
-                if (result[0].isVerified == 0) {
-                  
-                  var is_Verified = false
-                }
-
-                return connectDB
-                  .query(updateLoginLoggedQuery, [1, result[0].id])
-                  .then(([updateResult]) => {
-                    return { updateResult, authToken, response: result[0],isVerified: is_Verified };
-                  });
-              } else {
-                return res.status(401).send({
-                  status: false,
-                  message: "Incorrect Email or Password.",
-                });
-              }
+          if (result[0].isActive == 0){
+            const response = {
+              id : result[0].id,
+              adminId : result[0].adminId,
+              firstName : result[0].firstName,
+              lastName : result[0].lastName,
+              roleId : result[0].roleId,
+              isActive : false,
+            }
+            return res.status(400).send({
+              status: false,
+              message: "User is not Active.",
+              data: response,
+              
             });
+          }
+          if (result[0].isVerified == 0) {    
+              var isVerified = false
+              const response = {
+                id : result[0].id,
+                firstName : resetPassword[0].firstName,
+                lastName : resetPassword[0].lastName,
+                roleId : result[0].roleId,
+                isVerified:isVerified,
+              }
+              return res.status(400).send({
+                status: false,
+                message: "User is not verified.",
+                data: response,
+                
+              });
+          }
+          
+          return bcrypt
+          .compare(password, result[0].password)
+          .then(function (isAuthenticated) {
+            if (isAuthenticated) {
+              const authToken = newToken(result[0]);
+              delete result[0].password;
+            
+              return connectDB
+                .query(updateLoginLoggedQuery, [1, result[0].id])
+                .then(([updateResult]) => {
+                  return { updateResult, authToken, response: result[0],isVerified: is_Verified };
+                });
+            } else {
+              return res.status(401).send({
+                status: false,
+                message: "Incorrect Email or Password.",
+              });
+            }
+          });
+          
         }
       })
       .then(({ updateResult, authToken, response,isVerified }) => {
@@ -314,21 +342,25 @@ const getUserById = async (req, res) => {
 
 const activateUser = async (req, res) => {
   const user_id = req.params.id;
-  const adminStatus = req.body.status;
+  var {status,adminId} = req.body;
 
+  if (adminId == null){
+    var adminId = user_id
+  }
   const userActiveQuery =
-    "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=?";
-  userActiveData = [adminStatus, user_id];
+    "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=? or admin_id=?";
+  userActiveData = [status, user_id, adminId];
+  console.log(userActiveData)
   try {
     connectDB.query(userActiveQuery, userActiveData).then(([result]) => {
-      if (result.length <= 0) {
+      if (result.affectedRows <= 0) {
         res
           .status(404)
           .send({ status: false, message: "Unable to change user status." });
       } else {
         res
           .status(200)
-          .send({ status: true, message: "User is status changes." });
+          .send({ status: true, message: "User is status changed." });
       }
     });
   } catch (err) {
