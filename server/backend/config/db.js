@@ -5,7 +5,7 @@ var connectDB = mysql.createPool({
   host: "localhost",
   user: "root",
   port: 3306,
-  password: "root",
+  password: "admin",
   database: "expenses_managment",
 });
 

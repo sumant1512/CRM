@@ -21,20 +21,16 @@ const getExpenseCategory = async (req, res) => {
 
         .then(([result]) => {
           if (result.length <= 0) {
-            res
-              .status(404)
-              .send({
-                status: false,
-                message: "Fail to fetch expense category.",
-              });
+            res.status(404).send({
+              status: false,
+              message: "Fail to fetch expense category.",
+            });
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Expense Category is fetched succesfully.",
-                data: result,
-              });
+            res.status(200).send({
+              status: true,
+              message: "Expense Category is fetched succesfully.",
+              data: result,
+            });
             return;
           }
         })
@@ -51,12 +47,11 @@ const getExpenseCategory = async (req, res) => {
       return;
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin",
-      });
+    console.log("here");
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin",
+    });
   }
 };
 
@@ -94,29 +89,23 @@ const addExpenseCategory = async (req, res) => {
         })
         .then(([result]) => {
           if (result.length <= 0) {
-            res
-              .status(404)
-              .send({
-                status: false,
-                message: "Expense Category is not added.",
-              });
+            res.status(404).send({
+              status: false,
+              message: "Expense Category is not added.",
+            });
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Expense Category added succesfully.",
-              });
+            res.status(200).send({
+              status: true,
+              message: "Expense Category added succesfully.",
+            });
           }
         })
         .catch((err) => {
           if (err.message == "Expense Category Name already exists") {
-            res
-              .status(500)
-              .send({
-                status: false,
-                message: "Expense Category Name already exists.",
-              });
+            res.status(500).send({
+              status: false,
+              message: "Expense Category Name already exists.",
+            });
           } else {
             sendResponseError(
               500,
@@ -130,12 +119,10 @@ const addExpenseCategory = async (req, res) => {
       return;
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin",
+    });
   }
 };
 
@@ -172,29 +159,23 @@ const updateExpenseCategory = async (req, res) => {
         })
         .then(([result]) => {
           if (result.length <= 0) {
-            res
-              .status(404)
-              .send({
-                status: false,
-                message: "Expense Category is not updated.",
-              });
+            res.status(404).send({
+              status: false,
+              message: "Expense Category is not updated.",
+            });
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Expense Category is updated succesfully.",
-              });
+            res.status(200).send({
+              status: true,
+              message: "Expense Category is updated succesfully.",
+            });
           }
         })
         .catch((err) => {
           if (err.message == "Expense Category Name already exists") {
-            res
-              .status(500)
-              .send({
-                status: false,
-                message: "Expense Category Name already exists.",
-              });
+            res.status(500).send({
+              status: false,
+              message: "Expense Category Name already exists.",
+            });
           } else {
             sendResponseError(
               500,
@@ -208,12 +189,10 @@ const updateExpenseCategory = async (req, res) => {
       return;
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin",
+    });
   }
 };
 module.exports = {
