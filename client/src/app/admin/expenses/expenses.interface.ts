@@ -1,11 +1,15 @@
 export interface IAddExpenseRequestBody {
-  expenseName: string;
+  description: string;
+  categoryId: number;
+  userId: number;
   adminId: number;
 }
 
-export interface IExpense {
+export interface IExpense extends IAddExpenseRequestBody {
   id: number;
-  expenseName: string;
+  categoryName: string;
+  firstName: string;
+  lastName: string;
   createdAt: string;
   modifiedAt: string;
 }

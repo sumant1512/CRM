@@ -14,13 +14,16 @@
   </div>
   <div class="col-md-6">
     <label for="validationDefault02" class="form-label">Category</label>
-    <input
+    <select
+      class="form-select"
       formControlName="category"
-      type="text"
-      class="form-control"
-      id="validationDefault02"
-      required
-    />
+      aria-label="Default select example"
+    >
+      <option selected>Other</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
   </div>
   <div class="col-md-6">
     <label for="validationDefaultUsername" class="form-label">Point</label>

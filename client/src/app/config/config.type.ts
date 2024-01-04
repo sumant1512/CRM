@@ -9,9 +9,10 @@ export interface ApiType {
   addAdmin: string;
   activateAdmin: string;
   employees: string;
-  category: string;
   activateEmployee: string;
   addEmployee: string;
+  category: string;
+  expense: string;
 }
 
 export interface FeatureFlagType {

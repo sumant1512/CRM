@@ -10,12 +10,13 @@ export const AppConfigurations: AppConfigType = {
   api: {
     login: host + '/api/user/login',
     admins: host + '/api/user/admins',
+    addEmployee: host + '/api/admin/register',
     addAdmin: host + '/api/user/register',
-    category: host + '/api/user/expenseCategory',
     activateAdmin: host + '/api/user/activate',
     employees: host + '/api/admin/employees',
     activateEmployee: host + '/api/admin/activate',
-    addEmployee: host + '/api/admin/register',
+    category: host + '/api/user/expenseCategory',
+    expense: host + '/api/expense',
   },
   featureFlags: {
     isSearchFilterActive: true,
