@@ -857,7 +857,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"categoryName\":\"SNACKsSSaA\",\r\n\"user_id\":1,\r\n\"admin_id\":1}",
+							"raw": "{\"categoryName\":\"SCKrfsSSaA\",\r\n\"user_id\":1,\r\n\"admin_id\":1}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -904,7 +904,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Fri, 22 Dec 2023 18:42:25 GMT"
+							"value": "Thu, 04 Jan 2024 19:40:41 GMT"
 						},
 						{
 							"key": "Connection",
@@ -941,12 +941,12 @@
 			},
 			"response": [
 				{
-					"name": "getExpenseCategories",
+					"name": "Get Expense Category",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/expenseCategory/",
+							"raw": "http://localhost:3000/api/expenseCategory/?adminId=1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -956,6 +956,12 @@
 								"api",
 								"expenseCategory",
 								""
+							],
+							"query": [
+								{
+									"key": "adminId",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -977,15 +983,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "109"
+							"value": "129"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"6d-nYSpCTbDnc/K+a5KYNuCnbkbOus\""
+							"value": "W/\"81-pt41WscArhZqlBrkrQY5hxlHi3k\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 21 Dec 2023 21:57:24 GMT"
+							"value": "Thu, 04 Jan 2024 19:56:19 GMT"
 						},
 						{
 							"key": "Connection",
@@ -997,7 +1003,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense Category is fetched succesfully.\",\n    \"data\": {\n        \"id\": 8,\n        \"category_name\": \"SALARY\"\n    }\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense Category is fetched succesfully.\",\n    \"data\": [\n        {\n            \"id\": 19,\n            \"category_name\": \"SCKrfsSSaA\",\n            \"admin_id\": 1\n        }\n    ]\n}"
 				}
 			]
 		},
@@ -1041,13 +1047,13 @@
 			},
 			"response": [
 				{
-					"name": "New Request",
+					"name": "Update Expense Category",
 					"originalRequest": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"categoryId\":\"11\",\r\n\"categoryName\":\"Material\",\r\n\"user_id\":1,\r\n\"admin_id\":1}",
+							"raw": "{\r\n\"categoryName\":\"Materifdhfhal\",\r\n\"user_id\":1,\r\n\"admin_id\":1}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1055,7 +1061,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/expenseCategory/",
+							"raw": "http://localhost:3000/api/expenseCategory/19",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1064,7 +1070,7 @@
 							"path": [
 								"api",
 								"expenseCategory",
-								""
+								"19"
 							]
 						}
 					},
@@ -1086,15 +1092,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "68"
+							"value": "69"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"44-yW9fQg3JfEAkX7WGVHyJRIHemH8\""
+							"value": "W/\"45-0/8U4h+2BE5rAd5jRhoCierCj9w\""
 						},
 						{
 							"key": "Date",
-							"value": "Fri, 22 Dec 2023 19:54:07 GMT"
+							"value": "Thu, 04 Jan 2024 20:01:51 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1106,7 +1112,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense Category is updated succesfully.\"\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense Category is updated successfully.\"\n}"
 				}
 			]
 		},
