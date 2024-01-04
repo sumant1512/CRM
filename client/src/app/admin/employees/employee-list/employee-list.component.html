@@ -1,0 +1,54 @@
+<div class="accordion" id="accordionExample">
+  <div *ngFor="let employee of employeeList" class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button
+        class="accordion-button"
+        type="button"
+        data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#collapse' + employee.id"
+        aria-expanded="true"
+        [attr.aria-controls]="'#collapse' + employee.id"
+      >
+        {{ employee.firstName }} {{ employee.lastName }}
+      </button>
+    </h2>
+    <div
+      [id]="'collapse' + employee.id"
+      class="accordion-collapse collapse hide"
+      aria-labelledby="headingOne"
+      data-bs-parent="#accordionExample"
+    >
+      <div class="accordion-body">
+        <div class="row">
+          <div class="col-6 fw-bold">Email:</div>
+          <div class="col-6">{{ employee.email }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Mobile:</div>
+          <div class="col-6">{{ employee.mobileNumber }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Status:</div>
+          <div class="col-6">
+            {{ employee.isActive ? "Active" : "Inactive" }}
+            <a
+              class="link cursor-pointer ms-4"
+              (click)="upateStatus(employee.isActive ? 0 : 1, employee.id)"
+              >{{ employee.isActive ? "Deactivate" : "Activate" }}</a
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Verification:</div>
+          <div class="col-6">
+            {{ employee.isVerified ? "Verified" : "Not Verified" }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 fw-bold">Registered On:</div>
+          <div class="col-6">{{ employee.createdAt | date : "longDate" }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

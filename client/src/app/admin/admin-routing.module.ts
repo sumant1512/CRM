@@ -11,14 +11,24 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       {
+        path: 'employees',
+        loadChildren: () =>
+          import('./employees/employees.module').then((m) => m.EmployeesModule),
+      },
+      {
+        path: 'category',
+        loadChildren: () =>
+          import('./category/category.module').then((m) => m.CategoryModule),
+      },
+      {
         path: 'expense',
         loadChildren: () =>
           import('./expenses/expenses.module').then((m) => m.ExpensesModule),
       },
       {
-        path: 'employees',
+        path: 'wallet',
         loadChildren: () =>
-          import('./employees/employees.module').then((m) => m.EmployeesModule),
+          import('./wallet/wallet.module').then((m) => m.WalletModule),
       },
       { path: '**', redirectTo: 'home', pathMatch: 'full' },
     ],
