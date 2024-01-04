@@ -18,7 +18,6 @@ const verifyUser = async (req, res, next) => {
 
   try {
     const payload = await verifyToken(authorization.split(" ")[1]);
-    console.log(payload);
     if (payload) {
       const checkUserQuery =
         "SELECT COUNT(*) as count FROM expenses_managment.user WHERE id = ? and logged_in = ?";
