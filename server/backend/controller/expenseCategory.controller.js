@@ -177,10 +177,16 @@ const updateExpenseCategory = async (req, res) => {
   }
 };
 
+const deleteExpenseCategory = async (req,res) => {
+  const categoryId = req.params.id
+  return true
+}
+
 
 
 module.exports = {
   addExpenseCategory,
   updateExpenseCategory,
   getExpenseCategory,
+  deleteExpenseCategory,
 };
