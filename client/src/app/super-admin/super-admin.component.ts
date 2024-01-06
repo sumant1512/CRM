@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../login/auth.service';
 import { Subscription } from 'rxjs';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-super-admin',
@@ -12,7 +13,8 @@ export class SuperAdminComponent {
   subscription = new Subscription();
   constructor(
     private authService: AuthService,
-    private tokenService: TokenStorageService
+    private tokenService: TokenStorageService,
+    private router: Router
   ) {}
 
   toggle(): void {
@@ -21,7 +23,13 @@ export class SuperAdminComponent {
   }
 
   logout(): void {
-    // this.subscription.add(this.authService.logout());
-    this.tokenService.signOut();
+    this.subscription.add(
+      this.authService.logout().subscribe((response) => {
+        if (response.status) {
+          this.tokenService.signOut();
+          this.router.navigate(['/login']);
+        }
+      })
+    );
   }
 }

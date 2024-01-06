@@ -5,6 +5,8 @@ export interface AppConfigType {
 
 export interface ApiType {
   login: string;
+  logout: string;
+  resetPassword: string;
   admins: string;
   addAdmin: string;
   activateAdmin: string;

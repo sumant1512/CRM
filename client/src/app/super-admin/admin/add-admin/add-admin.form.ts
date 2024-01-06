@@ -7,5 +7,6 @@ export function addAdminForm(): FormGroup {
     email: new FormControl('', [Validators.required]),
     mobileNumber: new FormControl('', [Validators.required]),
     roleId: new FormControl('2'),
+    adminId: new FormControl('9'),
   });
 }

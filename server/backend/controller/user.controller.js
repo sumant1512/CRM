@@ -129,6 +129,7 @@ const loginUser = async (req, res) => {
     if (result[0].isActive == 0) {
       const response = {
         id: result[0].id,
+        email: result[0].email,
         adminId: result[0].adminId,
         firstName: result[0].firstName,
         lastName: result[0].lastName,
@@ -145,6 +146,7 @@ const loginUser = async (req, res) => {
     if (result[0].isVerified == 0) {
       const response = {
         id: result[0].id,
+        email: result[0].email,
         firstName: result[0].firstName,
         lastName: result[0].lastName,
         roleId: result[0].roleId,
@@ -231,27 +233,23 @@ const getAllAdmin = async (req, res) => {
 };
 
 const getAllUser = async (req, res) => {
-  const { admin_id } = req.body;
+  const { adminId } = req.body;
 
   const getUserQuery =
-    "SELECT  id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, transaction_count as transactionCount ,is_verified as isVerified  FROM expenses_managment.user WHERE admin_id=? and is_active=1";
+    "SELECT  id, first_name as firstName, last_name as lastName, email, mobile_number as mobileNumber, role_id as roleId, transaction_count as transactionCount ,is_verified as isVerified, is_active as isActive , created_at as createdAt  FROM expenses_managment.user WHERE admin_id=?";
   try {
     connectDB
-      .query(getUserQuery, [admin_id])
+      .query(getUserQuery, [adminId])
       .then(([result]) => {
         if (result.length <= 0) {
           res
             .status(404)
             .send({ status: false, message: "Unable to fetch users data." });
         } else {
-          delete result[0].password;
-          const response = {
-            result,
-          };
           res.status(200).send({
             status: false,
             message: "User data fetched succesfully.",
-            data: response,
+            data: result,
           });
         }
       })
@@ -347,11 +345,11 @@ const activateUser = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-  const { email, new_password, old_password } = req.body;
+  const { email, newPassword, oldPassword } = req.body;
 
   const resetPasswordQuery =
     "UPDATE expenses_managment.user SET password=?, is_verified=?, modified_at = NOW() WHERE email=?";
-  const passwordHash = await bcrypt.hash(new_password, 8);
+  const passwordHash = await bcrypt.hash(newPassword, 8);
   const resetPasswordData = [passwordHash, 1, email];
 
   const loginQuery =
@@ -368,7 +366,7 @@ const resetPassword = async (req, res) => {
     }
 
     const isAuthenticated = await bcrypt.compare(
-      old_password,
+      oldPassword,
       result[0].password
     );
 

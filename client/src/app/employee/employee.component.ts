@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../login/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee',
@@ -7,7 +10,12 @@ import { TokenStorageService } from '../_services/token-storage.service';
   styleUrls: ['./employee.component.scss'],
 })
 export class EmployeeComponent {
-  constructor(private tokenService: TokenStorageService) {}
+  subscription = new Subscription();
+  constructor(
+    private tokenService: TokenStorageService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   toggle(): void {
     const $wrapper = document.querySelector('#wrapper') as HTMLElement;
@@ -15,7 +23,13 @@ export class EmployeeComponent {
   }
 
   logout(): void {
-    // this.subscription.add(this.authService.logout());
-    this.tokenService.signOut();
+    this.subscription.add(
+      this.authService.logout().subscribe((response) => {
+        if (response.status) {
+          this.tokenService.signOut();
+          this.router.navigate(['/login']);
+        }
+      })
+    );
   }
 }
