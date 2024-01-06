@@ -19,6 +19,16 @@
   justify-content: center;
   align-items: center;
 }
+.inactive-message {
+  color: white;
+  text-align: center;
+  font-size: 0.85em;
+}
+.error {
+  color: white;
+  font-size: 12px;
+  margin-left: 20px;
+}
 .container span {
   position: absolute;
   left: 0;

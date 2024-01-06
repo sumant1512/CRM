@@ -22,7 +22,6 @@ export class EmployeeListComponent implements OnInit {
     this.subscription.add(
       this.employeeService.fetchEmployees().subscribe((response: any) => {
         this.employeeList = response;
-        console.log(this.employeeList);
       })
     );
   }
