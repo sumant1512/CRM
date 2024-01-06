@@ -17,7 +17,7 @@ export const AppConfigurations: AppConfigType = {
     activateEmployee: host + '/api/user/activate',
     addAdmin: host + '/api/user/register',
     activateAdmin: host + '/api/user/activate',
-    category: host + '/api/user/expenseCategory',
+    category: host + '/api/expenseCategory',
     expense: host + '/api/expense',
   },
   featureFlags: {

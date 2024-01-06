@@ -4,6 +4,7 @@ import { Observable, map, of } from 'rxjs';
 import { AppConfigurations } from 'src/app/config/config';
 import { ApiType } from 'src/app/config/config.type';
 import { IAddCategoryRequestBody } from './category.interface';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,20 +21,25 @@ export class CategoryService {
     },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private tokenService: TokenStorageService
+  ) {}
 
   fetchCategory(): Observable<any> {
-    return of(this.categoryies);
-    // return this.http.get<any>(this.apiUrls.category).pipe(
-    //   map((response) => {
-    //     if (response) {
-    //       return response.data;
-    //     }
-    //   })
-    // );
+    return this.http
+      .get<any>(`${this.apiUrls.category}/${this.tokenService.getUser().id}`)
+      .pipe(
+        map((response) => {
+          if (response) {
+            return response.data;
+          }
+        })
+      );
   }
 
   addCategory(body: IAddCategoryRequestBody): Observable<any> {
+    console.log(body);
     return this.http.post<any>(this.apiUrls.category, body).pipe(
       map((response) => {
         if (response) {

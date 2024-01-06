@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { addCategoryForm } from './add-category.form';
 import { CategoryService } from '../category.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
   selector: 'app-add-category',
@@ -14,15 +15,20 @@ export class AddCategoryComponent {
   constructor(
     private categoryService: CategoryService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private tokenService: TokenStorageService
   ) {}
 
   addCategory(): void {
-    this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-    // this.categoryService
-    //   .addCategory(this.addCategoryForm.value)
-    //   .subscribe((response) => {
-    //         this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-    //   });
+    this.categoryService
+      .addCategory({
+        ...this.addCategoryForm.value,
+        adminId: this.tokenService.getUser().id,
+      })
+      .subscribe((response) => {
+        if (response.status) {
+          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+        }
+      });
   }
 }

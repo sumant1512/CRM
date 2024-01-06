@@ -324,7 +324,6 @@ const activateUser = async (req, res) => {
   const userActiveQuery =
     "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=? or admin_id=?";
   userActiveData = [status, user_id, adminId];
-  console.log(userActiveData);
   try {
     connectDB.query(userActiveQuery, userActiveData).then(([result]) => {
       if (result.affectedRows <= 0) {
