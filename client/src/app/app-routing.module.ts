@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'super-admin',
-    canActivate: [authGuard],
+    canActivate: [],
     loadChildren: () =>
       import('./super-admin/super-admin.module').then(
         (m) => m.SuperAdminModule
@@ -18,13 +18,13 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [authGuard],
+    canActivate: [],
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'employee',
-    canActivate: [authGuard],
+    canActivate: [],
     loadChildren: () =>
       import('./employee/employee.module').then((m) => m.EmployeeModule),
   },

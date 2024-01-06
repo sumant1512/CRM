@@ -13,7 +13,8 @@ const {
 } = require("../utils/utility.function");
 
 const registerUser = async (req, res) => {
-  const { firstName, lastName, email, mobileNumber, roleId, adminId } = req.body;
+  const { firstName, lastName, email, mobileNumber, roleId, adminId } =
+    req.body;
 
   let expectedRoleId = null;
   if (roleId == 2) {
@@ -23,14 +24,19 @@ const registerUser = async (req, res) => {
   }
 
   try {
-    const checkRoleIdQuery = "SELECT role_id FROM expenses_managment.user WHERE id=? and role_id =?";
-    const [roleCheckResult] = await connectDB.query(checkRoleIdQuery, [adminId, expectedRoleId]);
+    const checkRoleIdQuery =
+      "SELECT role_id FROM expenses_managment.user WHERE id=? and role_id =?";
+    const [roleCheckResult] = await connectDB.query(checkRoleIdQuery, [
+      adminId,
+      expectedRoleId,
+    ]);
 
     if (roleCheckResult.length > 0 || roleId == 1) {
       const passwordHash = await bcrypt.hash("admin", 8);
       const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
-      const checkEmailQuery = "SELECT COUNT(*) as count FROM expenses_managment.user WHERE email = ?";
+      const checkEmailQuery =
+        "SELECT COUNT(*) as count FROM expenses_managment.user WHERE email = ?";
       const [emailCheckResult] = await connectDB.query(checkEmailQuery, email);
       const emailExists = emailCheckResult[0].count > 0;
 
@@ -42,53 +48,66 @@ const registerUser = async (req, res) => {
       } else {
         const trans_count = 0;
         const userData = [
-          firstName, lastName, email, passwordHash, mobileNumber, 0, roleId, adminId,
-          trans_count, 0, currentDateTime, currentDateTime
+          firstName,
+          lastName,
+          email,
+          passwordHash,
+          mobileNumber,
+          0,
+          roleId,
+          adminId,
+          trans_count,
+          0,
+          currentDateTime,
+          currentDateTime,
         ];
 
-        const registerQuery = "INSERT INTO expenses_managment.user (first_name, last_name, email, password, mobile_number, is_active, role_id, admin_id, transaction_count, is_verified, created_at, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        const registerQuery =
+          "INSERT INTO expenses_managment.user (first_name, last_name, email, password, mobile_number, is_active, role_id, admin_id, transaction_count, is_verified, created_at, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const [registerResult] = await connectDB.query(registerQuery, userData);
 
         if (registerResult && registerResult.insertId) {
           const [walletResult] = await connectDB.query(
-            "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount) VALUES (?, ?)", [registerResult.insertId, 0]
+            "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount) VALUES (?, ?)",
+            [registerResult.insertId, 0]
           );
 
           if (walletResult.affectedRows === 1) {
             return res.status(201).send({
               status: true,
               message: "Successfully account registered.",
-              data: {}
+              data: {},
             });
           } else {
             return res.status(201).send({
               status: true,
-              message: "Successfully account registered. Wallet already exists for the user.",
-              data: {}
+              message:
+                "Successfully account registered. Wallet already exists for the user.",
+              data: {},
             });
           }
         } else {
           return res.status(500).send({
             status: false,
-            message: "User not registered."
+            message: "User not registered.",
           });
         }
       }
     } else {
       return res.status(400).send({
         status: false,
-        message: "Admin can be registered by superadmin, and employee can be added by admin."
+        message:
+          "Admin can be registered by superadmin, and employee can be added by admin.",
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).send({
       status: false,
-      message: "User not registered. Please check the error: " + err
+      message: "User not registered. Please check the error: " + err,
     });
   }
 };
-
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -144,7 +163,10 @@ const loginUser = async (req, res) => {
       const authToken = newToken(result[0]);
       delete result[0].password;
 
-      const [updateResult] = await connectDB.query(updateLoginLoggedQuery, [1, result[0].id]);
+      const [updateResult] = await connectDB.query(updateLoginLoggedQuery, [
+        1,
+        result[0].id,
+      ]);
 
       if (updateResult && updateResult.affectedRows === 1) {
         return res.status(200).send({
@@ -174,7 +196,6 @@ const loginUser = async (req, res) => {
     });
   }
 };
-
 
 const getAllAdmin = async (req, res) => {
   const getAdminQuery =
@@ -297,15 +318,15 @@ const getUserById = async (req, res) => {
 
 const activateUser = async (req, res) => {
   const user_id = req.params.id;
-  var {status,adminId} = req.body;
+  var { status, adminId } = req.body;
 
-  if (adminId == null){
-    var adminId = user_id
+  if (adminId == null) {
+    var adminId = user_id;
   }
   const userActiveQuery =
     "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=? or admin_id=?";
   userActiveData = [status, user_id, adminId];
-  console.log(userActiveData)
+  console.log(userActiveData);
   try {
     connectDB.query(userActiveQuery, userActiveData).then(([result]) => {
       if (result.affectedRows <= 0) {
@@ -346,10 +367,16 @@ const resetPassword = async (req, res) => {
       });
     }
 
-    const isAuthenticated = await bcrypt.compare(old_password, result[0].password);
+    const isAuthenticated = await bcrypt.compare(
+      old_password,
+      result[0].password
+    );
 
     if (isAuthenticated) {
-      const [updateResult] = await connectDB.query(resetPasswordQuery, resetPasswordData);
+      const [updateResult] = await connectDB.query(
+        resetPasswordQuery,
+        resetPasswordData
+      );
 
       if (updateResult && updateResult.affectedRows === 1) {
         return res.status(200).send({
@@ -375,11 +402,14 @@ const resetPassword = async (req, res) => {
         message: "Enter correct old password.",
       });
     } else {
-      sendResponseError(500, "Unable to reset the password. Error- " + err.message, res);
+      sendResponseError(
+        500,
+        "Unable to reset the password. Error- " + err.message,
+        res
+      );
     }
   }
 };
-
 
 const logout = async (req, res) => {
   const user_id = req.params.id;

@@ -10,6 +10,7 @@ export interface IExpense extends IAddExpenseRequestBody {
   categoryName: string;
   firstName: string;
   lastName: string;
+  expensePrice: string;
   createdAt: string;
   modifiedAt: string;
 }
