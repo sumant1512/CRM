@@ -1,8 +1,46 @@
 <div class="container table-responsive py-5">
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label for="validationDefault02" class="form-label">Expense By</label>
+      <select
+        class="form-select"
+        [(ngModel)]="userId"
+        aria-label="Default select example"
+      >
+        <option value="">None</option>
+        <option value="1">Material</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="validationDefault02" class="form-label">Category</label>
+      <select
+        class="form-select"
+        [(ngModel)]="categoryId"
+        aria-label="Default select example"
+      >
+        <option value="">None</option>
+        <option value="1">Material</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Start Date</label>
+      <input class="form-control" type="date" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">End Date</label>
+      <input class="form-control" type="date" />
+    </div>
+  </div>
+
   <table class="table table-bordered table-hover">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
+        <th scope="col">Expense By</th>
         <th scope="col">Category</th>
         <th scope="col">Description</th>
         <th scope="col">Points</th>
@@ -10,9 +48,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let expense of expenseList">
+      <tr *ngFor="let expense of expenseList | filter : categoryId">
         <th scope="row">{{ expense.id }}</th>
+        <td>{{ expense.firstName }} {{ expense.lastName }}</td>
         <td>{{ expense.categoryName }}</td>
+        <td>{{ expense.description }}</td>
+        <td>{{ expense.expensePrice }}</td>
         <td><i class="fa fa-trash-o me-4"></i></td>
       </tr>
     </tbody>

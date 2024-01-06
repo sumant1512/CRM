@@ -136,70 +136,72 @@ const loginUser = async (req, res) => {
             message: "User is not registered",
           });
         } else {
-          if (result[0].isActive == 0){
+          if (result[0].isActive == 0) {
             const response = {
-              id : result[0].id,
-              adminId : result[0].adminId,
-              firstName : result[0].firstName,
-              lastName : result[0].lastName,
-              roleId : result[0].roleId,
-              isActive : false,
-            }
+              id: result[0].id,
+              adminId: result[0].adminId,
+              firstName: result[0].firstName,
+              lastName: result[0].lastName,
+              roleId: result[0].roleId,
+              isActive: false,
+            };
             return res.status(400).send({
               status: false,
               message: "User is not Active.",
               data: response,
-              
             });
           }
-          if (result[0].isVerified == 0) {    
-              var isVerified = false
-              const response = {
-                id : result[0].id,
-                firstName : resetPassword[0].firstName,
-                lastName : resetPassword[0].lastName,
-                roleId : result[0].roleId,
-                isVerified:isVerified,
-              }
-              return res.status(400).send({
-                status: false,
-                message: "User is not verified.",
-                data: response,
-                
-              });
+          if (result[0].isVerified == 0) {
+            var isVerified = false;
+            const response = {
+              id: result[0].id,
+              firstName: resetPassword[0].firstName,
+              lastName: resetPassword[0].lastName,
+              roleId: result[0].roleId,
+              isVerified: isVerified,
+            };
+            return res.status(400).send({
+              status: false,
+              message: "User is not verified.",
+              data: response,
+            });
           }
-          
+
           return bcrypt
-          .compare(password, result[0].password)
-          .then(function (isAuthenticated) {
-            if (isAuthenticated) {
-              const authToken = newToken(result[0]);
-              delete result[0].password;
-            
-              return connectDB
-                .query(updateLoginLoggedQuery, [1, result[0].id])
-                .then(([updateResult]) => {
-                  return { updateResult, authToken, response: result[0],isVerified: is_Verified };
+            .compare(password, result[0].password)
+            .then(function (isAuthenticated) {
+              if (isAuthenticated) {
+                const authToken = newToken(result[0]);
+                delete result[0].password;
+
+                return connectDB
+                  .query(updateLoginLoggedQuery, [1, result[0].id])
+                  .then(([updateResult]) => {
+                    return {
+                      updateResult,
+                      authToken,
+                      response: result[0],
+                      isVerified: is_Verified,
+                    };
+                  });
+              } else {
+                return res.status(401).send({
+                  status: false,
+                  message: "Incorrect Email or Password.",
                 });
-            } else {
-              return res.status(401).send({
-                status: false,
-                message: "Incorrect Email or Password.",
-              });
-            }
-          });
-          
+              }
+            });
         }
       })
-      .then(({ updateResult, authToken, response,isVerified }) => {
+      .then(({ updateResult, authToken, response, isVerified }) => {
         if (updateResult && updateResult.affectedRows === 1) {
-          console.log(isVerified)
+          console.log(isVerified);
           return res.status(200).send({
             status: true,
             message: "User logged in successfully",
             data: response,
             authToken: authToken,
-            isVerified:isVerified,
+            isVerified: isVerified,
           });
         } else {
           return res.status(404).send({
@@ -342,15 +344,15 @@ const getUserById = async (req, res) => {
 
 const activateUser = async (req, res) => {
   const user_id = req.params.id;
-  var {status,adminId} = req.body;
+  var { status, adminId } = req.body;
 
-  if (adminId == null){
-    var adminId = user_id
+  if (adminId == null) {
+    var adminId = user_id;
   }
   const userActiveQuery =
     "UPDATE expenses_managment.user SET is_active=?,modified_at = NOW() WHERE id=? or admin_id=?";
   userActiveData = [status, user_id, adminId];
-  console.log(userActiveData)
+  console.log(userActiveData);
   try {
     connectDB.query(userActiveQuery, userActiveData).then(([result]) => {
       if (result.affectedRows <= 0) {
