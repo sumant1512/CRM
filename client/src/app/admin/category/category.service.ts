@@ -26,24 +26,31 @@ export class CategoryService {
     private tokenService: TokenStorageService
   ) {}
 
-  fetchCategory(): Observable<any> {
-    return this.http
-      .get<any>(`${this.apiUrls.category}/${this.tokenService.getUser().id}`)
-      .pipe(
-        map((response) => {
-          if (response) {
-            return response.data;
-          }
-        })
-      );
-  }
-
-  addCategory(body: IAddCategoryRequestBody): Observable<any> {
-    console.log(body);
-    return this.http.post<any>(this.apiUrls.category, body).pipe(
+  fetchCategory(adminId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrls.category}/${adminId}`).pipe(
       map((response) => {
         if (response) {
           return response.data;
+        }
+      })
+    );
+  }
+
+  addCategory(body: IAddCategoryRequestBody): Observable<any> {
+    return this.http.post<any>(this.apiUrls.category, body).pipe(
+      map((response) => {
+        if (response) {
+          return response;
+        }
+      })
+    );
+  }
+
+  deleteCategory(adminId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrls.category}/${adminId}`).pipe(
+      map((response) => {
+        if (response) {
+          return response;
         }
       })
     );

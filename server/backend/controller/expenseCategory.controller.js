@@ -190,8 +190,28 @@ const updateExpenseCategory = async (req, res) => {
   }
 };
 
+const deleteExpenseCategory = (req, res, next) => {
+  let categoryId = req.params.id;
+  connectDB.query(
+    "DELETE FROM expense_category WHERE  id= ?",
+    [categoryId],
+    (err, result, fields) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({
+          status: false,
+          message: err.sqlMessage,
+        });
+      } else {
+        res.status(200).send({ status: true, message: "Expense Deleted" });
+      }
+    }
+  );
+};
+
 module.exports = {
   addExpenseCategory,
   updateExpenseCategory,
   getExpenseCategory,
+  deleteExpenseCategory,
 };

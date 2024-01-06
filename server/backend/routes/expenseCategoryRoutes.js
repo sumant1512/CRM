@@ -3,6 +3,7 @@ const {
   addExpenseCategory,
   updateExpenseCategory,
   getExpenseCategory,
+  deleteExpenseCategory,
 } = require("../controller/expenseCategory.controller");
 const { verifyUser } = require("../middleware/middleware");
 const router = express.Router();
@@ -13,6 +14,6 @@ router.route("/:adminId").get([verifyUser], getExpenseCategory);
 
 router.route("/:id").put([verifyUser], updateExpenseCategory);
 
-// router.route('/expenseCategory/:id').delete([verifyUser], deleteProductInCart)
+router.route("/:id").delete([verifyUser], deleteExpenseCategory);
 
 module.exports = router;

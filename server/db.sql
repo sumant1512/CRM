@@ -50,6 +50,7 @@ CREATE TABLE `expenses` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `admin_id` int DEFAULT NULL,
   `expense_amount` int DEFAULT NULL,
   `description` varchar(100) NOT NULL,
   `archived` tinyint(1) DEFAULT NULL,
@@ -58,8 +59,10 @@ CREATE TABLE `expenses` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),
-  CONSTRAINT `expenses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `expenses_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `expense_category` (`id`)
+  KEY `admin_id` (`admin_id`),
+  CONSTRAINT `expenses_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `expenses_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `expenses_ibfk_3` FOREIGN KEY (`category_id`) REFERENCES `expense_category` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -84,4 +87,4 @@ INSERT INTO expenses_managment.user_role
 INSERT INTO expenses_managment.user_role 
     (role_name,created_at,modified_at) VALUE ("employee","2023-12-21 10:27:21.24","2023-12-21 10:27:21.24"); -- To add employee role
     
-select * from user;
+select * from expense_category;
