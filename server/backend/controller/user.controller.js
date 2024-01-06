@@ -15,211 +15,185 @@ const {
 const registerUser = async (req, res) => {
   const { firstName, lastName, email, mobileNumber, roleId, adminId } =
     req.body;
+
+  let expectedRoleId = null;
   if (roleId == 2) {
-    var expectedRoleId = 1;
+    expectedRoleId = 1;
   } else if (roleId == 3) {
-    var expectedRoleId = 2;
-  } else {
-    var expectedRoleId = null;
+    expectedRoleId = 2;
   }
 
-  const registerQuery =
-    "INSERT INTO expenses_managment.user (first_name, last_name, email, password,mobile_number,is_active,role_id,admin_id,transaction_count,is_verified, created_at,modified_at ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   try {
     const checkRoleIdQuery =
-      "SELECT role_id FROM expenses_managment.user WHERE id=? and role_id =? ";
-    connectDB
-      .query(checkRoleIdQuery, [adminId, expectedRoleId])
-      .then(async ([result]) => {
-        console.log(result);
-        if (result.length > 0) {
-          const passwordHash = await bcrypt.hash("admin", 8);
-          const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+      "SELECT role_id FROM expenses_managment.user WHERE id=? and role_id =?";
+    const [roleCheckResult] = await connectDB.query(checkRoleIdQuery, [
+      adminId,
+      expectedRoleId,
+    ]);
 
-          const checkEmailQuery =
-            "SELECT COUNT(*) as count FROM expenses_managment.user WHERE email = ?";
-          connectDB
-            .query(checkEmailQuery, email)
-            .then(([rows]) => {
-              const emailExists = rows[0].count > 0;
-              const trans_count = 0;
-              const userData = [
-                firstName,
-                lastName,
-                email,
-                passwordHash,
-                mobileNumber,
-                0,
-                roleId,
-                adminId,
-                trans_count,
-                0,
-                currentDateTime,
-                currentDateTime,
-              ];
+    if (roleCheckResult.length > 0 || roleId == 1) {
+      const passwordHash = await bcrypt.hash("admin", 8);
+      const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
-              if (emailExists) {
-                console.log(
-                  "Email already exists. Please choose another email."
-                );
-                return Promise.reject(new Error("Email already exists"));
+      const checkEmailQuery =
+        "SELECT COUNT(*) as count FROM expenses_managment.user WHERE email = ?";
+      const [emailCheckResult] = await connectDB.query(checkEmailQuery, email);
+      const emailExists = emailCheckResult[0].count > 0;
 
-                // Handle error or inform the user that the email already exists
-              } else {
-                // Email is unique, proceed with insertion
-                return connectDB.query(registerQuery, userData);
-              }
-            })
-            .then(([result]) => {
-              if (result) {
-                return connectDB.query(
-                  "INSERT IGNORE INTO expenses_managment.wallet (user_id,amount) VALUES (?, ?) ",
-                  [result.insertId, 0]
-                );
-              } else {
-                return Promise.reject(new Error("User not registered"));
-              }
-            })
-            .then(([result]) => {
-              if (result.affectedRows === 1) {
-                res.status(201).send({
-                  status: true,
-                  message: "Sucessfully account Register.",
-                  data: {},
-                });
-              } else {
-                console.log("Wallet already exists for the user.");
-                res.status(201).send({
-                  status: true,
-                  message: "Sucessfully account Register.",
-                  data: {},
-                });
-              }
-              // Proceed with further operations using the user details if needed
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).send({
-                status: false,
-                message: "User not registered. Please check error - " + err,
-              });
+      if (emailExists) {
+        return res.status(400).send({
+          status: false,
+          message: "Email already exists. Please choose another email.",
+        });
+      } else {
+        const trans_count = 0;
+        const userData = [
+          firstName,
+          lastName,
+          email,
+          passwordHash,
+          mobileNumber,
+          0,
+          roleId,
+          adminId,
+          trans_count,
+          0,
+          currentDateTime,
+          currentDateTime,
+        ];
+
+        const registerQuery =
+          "INSERT INTO expenses_managment.user (first_name, last_name, email, password, mobile_number, is_active, role_id, admin_id, transaction_count, is_verified, created_at, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        const [registerResult] = await connectDB.query(registerQuery, userData);
+
+        if (registerResult && registerResult.insertId) {
+          const [walletResult] = await connectDB.query(
+            "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount) VALUES (?, ?)",
+            [registerResult.insertId, 0]
+          );
+
+          if (walletResult.affectedRows === 1) {
+            return res.status(201).send({
+              status: true,
+              message: "Successfully account registered.",
+              data: {},
             });
+          } else {
+            return res.status(201).send({
+              status: true,
+              message:
+                "Successfully account registered. Wallet already exists for the user.",
+              data: {},
+            });
+          }
         } else {
-          res.status(400).send({
+          return res.status(500).send({
             status: false,
-            message:
-              "Admin can be register by superadmin and employee can be added by admin",
+            message: "User not registered.",
           });
         }
+      }
+    } else {
+      return res.status(400).send({
+        status: false,
+        message:
+          "Admin can be registered by superadmin, and employee can be added by admin.",
       });
+    }
   } catch (err) {
-    console.log("Error : ", err);
-    sendResponseError(500, "Something wrong please try again", res);
-    return;
+    console.log(err);
+    return res.status(500).send({
+      status: false,
+      message: "User not registered. Please check the error: " + err,
+    });
   }
 };
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const loginQuery =
-    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount,is_verified as isVerified, is_active as isActive  FROM expenses_managment.user WHERE email=?";
+    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive  FROM expenses_managment.user WHERE email=?";
   const updateLoginLoggedQuery =
     "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
 
   try {
-    connectDB
-      .query(loginQuery, [email])
-      .then(([result]) => {
-        if (result.length <= 0) {
-          return res.status(404).send({
-            status: false,
-            message: "User is not registered",
-          });
-        } else {
-          if (result[0].isActive == 0) {
-            const response = {
-              id: result[0].id,
-              adminId: result[0].adminId,
-              firstName: result[0].firstName,
-              lastName: result[0].lastName,
-              roleId: result[0].roleId,
-              isActive: false,
-            };
-            return res.status(400).send({
-              status: false,
-              message: "User is not Active.",
-              data: response,
-            });
-          }
-          if (result[0].isVerified == 0) {
-            var isVerified = false;
-            const response = {
-              id: result[0].id,
-              firstName: resetPassword[0].firstName,
-              lastName: resetPassword[0].lastName,
-              roleId: result[0].roleId,
-              isVerified: isVerified,
-            };
-            return res.status(400).send({
-              status: false,
-              message: "User is not verified.",
-              data: response,
-            });
-          }
+    const [result] = await connectDB.query(loginQuery, [email]);
 
-          return bcrypt
-            .compare(password, result[0].password)
-            .then(function (isAuthenticated) {
-              if (isAuthenticated) {
-                const authToken = newToken(result[0]);
-                delete result[0].password;
-
-                return connectDB
-                  .query(updateLoginLoggedQuery, [1, result[0].id])
-                  .then(([updateResult]) => {
-                    return {
-                      updateResult,
-                      authToken,
-                      response: result[0],
-                      isVerified: is_Verified,
-                    };
-                  });
-              } else {
-                return res.status(401).send({
-                  status: false,
-                  message: "Incorrect Email or Password.",
-                });
-              }
-            });
-        }
-      })
-      .then(({ updateResult, authToken, response, isVerified }) => {
-        if (updateResult && updateResult.affectedRows === 1) {
-          console.log(isVerified);
-          return res.status(200).send({
-            status: true,
-            message: "User logged in successfully",
-            data: response,
-            authToken: authToken,
-            isVerified: isVerified,
-          });
-        } else {
-          return res.status(404).send({
-            status: false,
-            message: "Unable to update the login status.",
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(500).send({
-          status: false,
-          message: "Error in Logging in. Please try after some time",
-        });
+    if (result.length <= 0) {
+      return res.status(404).send({
+        status: false,
+        message: "User is not registered",
       });
+    }
+
+    if (result[0].isActive == 0) {
+      const response = {
+        id: result[0].id,
+        adminId: result[0].adminId,
+        firstName: result[0].firstName,
+        lastName: result[0].lastName,
+        roleId: result[0].roleId,
+        isActive: false,
+      };
+      return res.status(401).send({
+        status: false,
+        message: "User is not Active.",
+        data: response,
+      });
+    }
+
+    if (result[0].isVerified == 0) {
+      const response = {
+        id: result[0].id,
+        firstName: result[0].firstName,
+        lastName: result[0].lastName,
+        roleId: result[0].roleId,
+        isVerified: false,
+      };
+      return res.status(401).send({
+        status: false,
+        message: "User is not verified.",
+        data: response,
+      });
+    }
+
+    const isAuthenticated = await bcrypt.compare(password, result[0].password);
+
+    if (isAuthenticated) {
+      const authToken = newToken(result[0]);
+      delete result[0].password;
+
+      const [updateResult] = await connectDB.query(updateLoginLoggedQuery, [
+        1,
+        result[0].id,
+      ]);
+
+      if (updateResult && updateResult.affectedRows === 1) {
+        return res.status(200).send({
+          status: true,
+          message: "User logged in successfully",
+          data: result[0],
+          authToken: authToken,
+          isVerified: result[0].isVerified,
+        });
+      } else {
+        return res.status(404).send({
+          status: false,
+          message: "Unable to update the login status.",
+        });
+      }
+    } else {
+      return res.status(401).send({
+        status: false,
+        message: "Incorrect Email or Password.",
+      });
+    }
   } catch (err) {
-    console.log("Error : ", err);
-    return res.status(500).send("Something wrong, please try again");
+    console.log(err);
+    return res.status(500).send({
+      status: false,
+      message: "Error in Logging in. Please try after some time",
+    });
   }
 };
 
@@ -376,67 +350,64 @@ const resetPassword = async (req, res) => {
   const { email, new_password, old_password } = req.body;
 
   const resetPasswordQuery =
-    "UPDATE expenses_managment.user SET password=?, is_verified=?,modified_at = NOW() WHERE email=?";
+    "UPDATE expenses_managment.user SET password=?, is_verified=?, modified_at = NOW() WHERE email=?";
   const passwordHash = await bcrypt.hash(new_password, 8);
   const resetPasswordData = [passwordHash, 1, email];
 
   const loginQuery =
-    "SELECT  password  FROM expenses_managment.user WHERE email=? and is_active=1";
+    "SELECT password FROM expenses_managment.user WHERE email=? and is_active=1";
+
   try {
-    connectDB
-      .query(loginQuery, [email])
-      .then(([result]) => {
-        if (result.length <= 0) {
-          res
-            .status(404)
-            .send({ status: false, message: "Unable to reset the password." });
-        } else {
-          return bcrypt
-            .compare(old_password, result[0].password)
-            .then(function (isAuthenticated) {
-              console.log("isAuthenticated", isAuthenticated);
-              if (isAuthenticated) {
-                console.log("here !!", resetPasswordData);
-                return connectDB.query(resetPasswordQuery, resetPasswordData);
-              } else {
-                res.status(401).send({
-                  status: false,
-                  message: "Enter correct old password.",
-                });
-                // Returning a rejected promise here would be more appropriate
-                return Promise.reject(new Error("Enter correct old password."));
-              }
-            });
-        }
-      })
-      .then(([result]) => {
-        console.log(result);
-        if (result && result.affectedRows === 1) {
-          res
-            .status(200)
-            .send({ status: true, message: "Password is reset successfully." });
-        } else {
-          res
-            .status(404)
-            .send({ status: false, message: "Unable to reset the password." });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.message === "Enter correct old password.") {
-          res
-            .status(401)
-            .send({ status: false, message: "Enter correct old password." });
-        } else {
-          sendResponseError(
-            500,
-            "Unable to reset the password. Error- " + err.message,
-            res
-          );
-        }
+    const [result] = await connectDB.query(loginQuery, [email]);
+
+    if (result.length <= 0) {
+      return res.status(404).send({
+        status: false,
+        message: "Unable to reset the password.",
       });
+    }
+
+    const isAuthenticated = await bcrypt.compare(
+      old_password,
+      result[0].password
+    );
+
+    if (isAuthenticated) {
+      const [updateResult] = await connectDB.query(
+        resetPasswordQuery,
+        resetPasswordData
+      );
+
+      if (updateResult && updateResult.affectedRows === 1) {
+        return res.status(200).send({
+          status: true,
+          message: "Password is reset successfully.",
+        });
+      } else {
+        return res.status(404).send({
+          status: false,
+          message: "Unable to reset the password.",
+        });
+      }
+    } else {
+      return res.status(401).send({
+        status: false,
+        message: "Enter correct old password.",
+      });
+    }
   } catch (err) {
-    sendResponseError(500, "Something wrong please try again", res);
+    if (err.message === "Enter correct old password.") {
+      return res.status(401).send({
+        status: false,
+        message: "Enter correct old password.",
+      });
+    } else {
+      sendResponseError(
+        500,
+        "Unable to reset the password. Error- " + err.message,
+        res
+      );
+    }
   }
 };
 
@@ -465,6 +436,7 @@ const logout = async (req, res) => {
     return;
   }
 };
+
 module.exports = {
   registerUser,
   loginUser,

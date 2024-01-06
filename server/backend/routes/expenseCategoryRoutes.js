@@ -9,9 +9,11 @@ const router = express.Router();
 
 router
   .route("/")
-  .get([], getExpenseCategory)
-  .post([], addExpenseCategory)
-  .put([], updateExpenseCategory);
+  .get([verifyUser], getExpenseCategory)
+  .post([verifyUser], addExpenseCategory);
+
+router.route('/:id').put([verifyUser], updateExpenseCategory)
+
 
 // router.route('/expenseCategory/:id').delete([verifyUser], deleteProductInCart)
 
