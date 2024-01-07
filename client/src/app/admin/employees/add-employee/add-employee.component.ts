@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EmployeeService } from '../employee.service';
 import { addEmployeeForm } from './add-employee.form';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-employee',
@@ -13,7 +14,9 @@ export class AddEmployeeComponent {
 
   constructor(
     private employeeService: EmployeeService,
-    private tokenService: TokenStorageService
+    private tokenService: TokenStorageService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   registerEmployee(): void {
@@ -23,7 +26,9 @@ export class AddEmployeeComponent {
         adminId: this.tokenService.getUser().id,
       })
       .subscribe((response) => {
-        console.log(response);
+        if (response.status) {
+          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+        }
       });
   }
 }

@@ -3,6 +3,7 @@ export interface IAddExpenseRequestBody {
   categoryId: number;
   userId: number;
   adminId: number;
+  expenseAmount: string;
 }
 
 export interface IExpense extends IAddExpenseRequestBody {
@@ -10,7 +11,6 @@ export interface IExpense extends IAddExpenseRequestBody {
   categoryName: string;
   firstName: string;
   lastName: string;
-  expensePrice: string;
   createdAt: string;
   modifiedAt: string;
 }

@@ -48,10 +48,8 @@ const verifyUser = async (req, res, next) => {
 };
 
 const incrementTransactionCount = (user_id, admin_id, res) => {
-  console.log(user_id, admin_id);
   const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
-  console.log(currentDateTime);
   return new Promise((resolve, reject) => {
     // get role type for user_id
     // Update trans count for admin id

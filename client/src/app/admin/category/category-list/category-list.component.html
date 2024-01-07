@@ -11,7 +11,13 @@
       <tr *ngFor="let category of categoryList">
         <th scope="row">{{ category.id }}</th>
         <td>{{ category.categoryName }}</td>
-        <td><i class="fa fa-trash-o me-4"></i><i class="fa fa-edit"></i></td>
+        <td>
+          <i
+            class="fa fa-trash-o me-4 pointer"
+            (click)="deleteCategory(category.id)"
+          ></i
+          ><i class="fa fa-edit pointer"></i>
+        </td>
       </tr>
     </tbody>
   </table>

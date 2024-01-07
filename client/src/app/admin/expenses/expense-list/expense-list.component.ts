@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ExpensesService } from '../expenses.service';
 import { Subscription } from 'rxjs';
 import { IExpense } from '../expenses.interface';
+import { CategoryService } from '../../category/category.service';
+import { ICategory } from '../../category/category.interface';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -13,18 +16,23 @@ export class ExpenseListComponent implements OnInit {
   userId!: number;
   categoryId!: number;
   expenseList: Array<IExpense> = [];
+  categoryList: Array<ICategory> = [];
 
-  constructor(private expenseService: ExpensesService) {}
+  constructor(
+    private expenseService: ExpensesService,
+    private categoryService: CategoryService,
+    private tokenService: TokenStorageService
+  ) {}
 
   ngOnInit(): void {
     this.getCategoryList();
   }
 
   getCategoryList(): void {
+    const adminId = this.tokenService.getUser().id;
     this.subscription.add(
-      this.expenseService.fetchExpenses().subscribe((response: any) => {
-        this.expenseList = response;
-        console.log(this.expenseList);
+      this.categoryService.fetchCategory(adminId).subscribe((response: any) => {
+        this.categoryList = response;
       })
     );
   }
