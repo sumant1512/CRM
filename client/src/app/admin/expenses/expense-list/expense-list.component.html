@@ -21,9 +21,9 @@
         aria-label="Default select example"
       >
         <option value="">None</option>
-        <option value="1">Material</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+        <option *ngFor="let category of categoryList" [value]="category.id">
+          {{ category.categoryName }}
+        </option>
       </select>
     </div>
     <div class="col-md-3">
@@ -53,7 +53,7 @@
         <td>{{ expense.firstName }} {{ expense.lastName }}</td>
         <td>{{ expense.categoryName }}</td>
         <td>{{ expense.description }}</td>
-        <td>{{ expense.expensePrice }}</td>
+        <td>{{ expense.expenseAmount }}</td>
         <td><i class="fa fa-trash-o me-4"></i></td>
       </tr>
     </tbody>

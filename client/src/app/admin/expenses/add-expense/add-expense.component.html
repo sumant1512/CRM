@@ -19,17 +19,16 @@
       formControlName="categoryId"
       aria-label="Default select example"
     >
-      <option selected>Other</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
+      <option *ngFor="let category of categoryList" [value]="category.id">
+        {{ category.categoryName }}
+      </option>
     </select>
   </div>
   <div class="col-md-6">
     <label for="validationDefaultUsername" class="form-label">Point</label>
     <div class="input-group">
       <input
-        formControlName="price"
+        formControlName="expenseAmount"
         type="text"
         class="form-control"
         id="validationDefaultUsername"
