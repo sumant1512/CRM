@@ -1124,7 +1124,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzAzMTk2MzgzLCJleHAiOjE3MTE4MzYzODN9.ggIezGcC8sXc9PyygURHc9yrbLcYnmoEJSrbXKMxtS8",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0NjUxNjA3LCJleHAiOjE3MTMyOTE2MDd9.4dNr0clg8y2hk1goXRn43ndAvlRPXw4-hqBFFriXlYY",
 							"type": "string"
 						}
 					]
@@ -1133,7 +1133,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"expenseAmount\":100,\r\n\"categoryName\":\"Materials\",\r\n\"description\":\"\",\r\n\"user_id\":3,\r\n\"admin_id\":1\r\n}",
+					"raw": "{\"description\":\"fdf\",\"categoryId\":\"21\",\"expenseAmount\":\"43400\",\"adminId\":9,\"userId\":9}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1156,13 +1156,13 @@
 			},
 			"response": [
 				{
-					"name": "New Request",
+					"name": "Add Expense",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n\"expenseAmount\":100,\r\n\"categoryName\":\"Material\",\r\n\"description\":\"\",\r\n\"user_id\":3,\r\n\"admin_id\":1\r\n}",
+							"raw": "{\"description\":\"fdf\",\"categoryId\":\"21\",\"expenseAmount\":\"43400\",\"adminId\":9,\"userId\":9}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1201,15 +1201,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "54"
+							"value": "55"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"36-vGxx/X/okEKNHBvL6XYPjkZHa5k\""
+							"value": "W/\"37-Dh1RyXjcjG2r3j3KJ27mlK8nYNA\""
 						},
 						{
 							"key": "Date",
-							"value": "Fri, 22 Dec 2023 21:00:05 GMT"
+							"value": "Sun, 07 Jan 2024 19:12:45 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1221,7 +1221,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense added succesfully.\"\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense added successfully.\"\n}"
 				}
 			]
 		},
@@ -1233,7 +1233,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzAzMTk2MzgzLCJleHAiOjE3MTE4MzYzODN9.ggIezGcC8sXc9PyygURHc9yrbLcYnmoEJSrbXKMxtS8",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0NjUxNjA3LCJleHAiOjE3MTMyOTE2MDd9.4dNr0clg8y2hk1goXRn43ndAvlRPXw4-hqBFFriXlYY",
 							"type": "string"
 						}
 					]
@@ -1242,7 +1242,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"expenseId\":1,\r\n\"expenseAmount\":200,\r\n\"categoryName\":\"Material\",\r\n\"description\":\"\",\r\n\"user_id\":3,\r\n\"admin_id\":1\r\n}",
+					"raw": "{\r\n\"expenseId\":1,\r\n\"expenseAmount\":200,\r\n\"categoryId\":21,\r\n\"description\":\"\",\r\n\"userId\":9,\r\n\"adminId\":9\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1271,7 +1271,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"expenseId\":1,\r\n\"expenseAmount\":200,\r\n\"categoryName\":\"Materials\",\r\n\"description\":\"\",\r\n\"user_id\":3,\r\n\"admin_id\":1\r\n}",
+							"raw": "{\r\n\"expenseId\":1,\r\n\"expenseAmount\":200,\r\n\"categoryId\":21,\r\n\"description\":\"\",\r\n\"userId\":9,\r\n\"adminId\":9\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1310,15 +1310,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "59"
+							"value": "60"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"3b-uclZk7WPN4HNeHgVhTAM7GhD628\""
+							"value": "W/\"3c-HqiSGBT3YjizwMPQVjvmmP/t8MA\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 20:11:53 GMT"
+							"value": "Sun, 07 Jan 2024 19:44:11 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1330,17 +1330,27 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense is updated succesfully.\"\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense is updated successfully.\"\n}"
 				}
 			]
 		},
 		{
 			"name": "Get All Expense",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0NjU3ODA5LCJleHAiOjE3MTMyOTc4MDl9.RF_RdViKmURyWDBT3Z94YZwUIY5Phmb3RDGMknfV4Nc",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/expense/?user_id=3&admin_id=1",
+					"raw": "http://localhost:3000/api/expense/?adminId=9",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1353,24 +1363,25 @@
 					],
 					"query": [
 						{
-							"key": "user_id",
-							"value": "3"
+							"key": "adminId",
+							"value": "9"
 						},
 						{
-							"key": "admin_id",
-							"value": "1"
+							"key": "user_id",
+							"value": "3",
+							"disabled": true
 						}
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "getAllExpenses",
+					"name": "Get All Expense",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/expense/?user_id=3&admin_id=1",
+							"raw": "http://localhost:3000/api/expense/?userId=9&roleId=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1383,12 +1394,12 @@
 							],
 							"query": [
 								{
-									"key": "user_id",
-									"value": "3"
+									"key": "userId",
+									"value": "9"
 								},
 								{
-									"key": "admin_id",
-									"value": "1"
+									"key": "roleId",
+									"value": "2"
 								}
 							]
 						}
@@ -1411,15 +1422,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "258"
+							"value": "525"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"102-bM0TSXLF6f1qYLmze3sAa+aey4w\""
+							"value": "W/\"20d-cEabfwr8h3gy7RnBw86zP1vodg0\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 20:12:03 GMT"
+							"value": "Sun, 07 Jan 2024 20:19:37 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1431,17 +1442,27 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": null,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"supervisor_id\": 1\n        },\n        {\n            \"id\": 4,\n            \"category_id\": 11,\n            \"user_id\": 4,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"supervisor_id\": 1\n        }\n    ]\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"category_id\": 11,\n            \"user_id\": 13,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"admin_id\": 9\n        },\n        {\n            \"id\": 5,\n            \"category_id\": 11,\n            \"user_id\": 9,\n            \"expense_amount\": 100,\n            \"description\": \"\",\n            \"admin_id\": 2\n        },\n        {\n            \"id\": 6,\n            \"category_id\": 21,\n            \"user_id\": 9,\n            \"expense_amount\": 434,\n            \"description\": \"fdf\",\n            \"admin_id\": 2\n        },\n        {\n            \"id\": 7,\n            \"category_id\": 21,\n            \"user_id\": 9,\n            \"expense_amount\": 434,\n            \"description\": \"fdf\",\n            \"admin_id\": 2\n        },\n        {\n            \"id\": 8,\n            \"category_id\": 21,\n            \"user_id\": 9,\n            \"expense_amount\": 43400,\n            \"description\": \"fdf\",\n            \"admin_id\": 2\n        }\n    ]\n}"
 				}
 			]
 		},
 		{
 			"name": "Expense By Id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0NjUxNjA3LCJleHAiOjE3MTMyOTE2MDd9.4dNr0clg8y2hk1goXRn43ndAvlRPXw4-hqBFFriXlYY",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/expense/1?user_id=3&admin_id=1",
+					"raw": "http://localhost:3000/api/expense/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1450,17 +1471,7 @@
 					"path": [
 						"api",
 						"expense",
-						"1"
-					],
-					"query": [
-						{
-							"key": "user_id",
-							"value": "3"
-						},
-						{
-							"key": "admin_id",
-							"value": "1"
-						}
+						"4"
 					]
 				}
 			},
@@ -1471,7 +1482,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/expense/4?user_id=3&admin_id=1",
+							"raw": "http://localhost:3000/api/expense/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1481,16 +1492,6 @@
 								"api",
 								"expense",
 								"4"
-							],
-							"query": [
-								{
-									"key": "user_id",
-									"value": "3"
-								},
-								{
-									"key": "admin_id",
-									"value": "1"
-								}
 							]
 						}
 					},
@@ -1516,11 +1517,11 @@
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"ee-dPMRBncME9Ht1IwORrB6Du6MWXc\""
+							"value": "W/\"ee-Uy6qepJfNCDPm1i/1vCsd4Vx490\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 19:38:25 GMT"
+							"value": "Sun, 07 Jan 2024 20:23:42 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1532,18 +1533,28 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": 11,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"archived\": 0,\n            \"created_at\": \"2023-12-22T21:00:05.000Z\",\n            \"modified_at\": \"2023-12-22T21:41:18.000Z\"\n        }\n    ]\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"category_id\": 21,\n            \"user_id\": 3,\n            \"expense_amount\": 200,\n            \"description\": \"\",\n            \"archived\": 0,\n            \"created_at\": \"2023-12-22T21:00:05.000Z\",\n            \"modified_at\": \"2024-01-07T19:44:11.000Z\"\n        }\n    ]\n}"
 				}
 			]
 		},
 		{
 			"name": "Delete Expense",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0NjUxNjA3LCJleHAiOjE3MTMyOTE2MDd9.4dNr0clg8y2hk1goXRn43ndAvlRPXw4-hqBFFriXlYY",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user_id\":\"\",\r\n    \"admin_id\":\"\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1551,7 +1562,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/expense/1?user_id=3&admin_id=1",
+					"raw": "http://localhost:3000/api/expense/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1560,17 +1571,7 @@
 					"path": [
 						"api",
 						"expense",
-						"1"
-					],
-					"query": [
-						{
-							"key": "user_id",
-							"value": "3"
-						},
-						{
-							"key": "admin_id",
-							"value": "1"
-						}
+						"6"
 					]
 				}
 			},
@@ -1582,7 +1583,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\":\"1\",\r\n    \"admin_id\":\"1\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1590,7 +1591,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/expense/2",
+							"raw": "http://localhost:3000/api/expense/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1599,7 +1600,7 @@
 							"path": [
 								"api",
 								"expense",
-								"2"
+								"6"
 							]
 						}
 					},
@@ -1629,7 +1630,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 19:46:11 GMT"
+							"value": "Sun, 07 Jan 2024 20:24:12 GMT"
 						},
 						{
 							"key": "Connection",
