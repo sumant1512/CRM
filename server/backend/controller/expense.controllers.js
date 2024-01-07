@@ -11,7 +11,7 @@ const getExpense = async (req, res) => {
 
   if (roleId == 2){
     var getAllExpenseQuery =
-    "SELECT ex.id, ex.category_id, ex.user_id, ex.expense_amount, ex.description, user.admin_id FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE admin_id = ? and archived = 0 or ex.user_id=?";
+    "SELECT ex.id, ex.category_id, ex.user_id, ex.expense_amount, ex.description, user.admin_id, user.role_id FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE admin_id = ? and archived = 0 or ex.user_id=?";
     var getAllExpenseData = [userId,userId]
   }
   else{
