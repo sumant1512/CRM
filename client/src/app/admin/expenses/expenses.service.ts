@@ -13,9 +13,8 @@ export class ExpensesService {
 
   constructor(private http: HttpClient) {}
 
-  fetchExpenses(): Observable<any> {
-    // return of(this.employee);
-    return this.http.get<any>(this.apiUrls.employees).pipe(
+  fetchExpenses(adminId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrls.expense}/${adminId}`).pipe(
       map((response) => {
         if (response) {
           return response.data;
@@ -26,6 +25,16 @@ export class ExpensesService {
 
   addExpense(body: IAddExpenseRequestBody): Observable<any> {
     return this.http.post<any>(`${this.apiUrls.expense}`, body).pipe(
+      map((response) => {
+        if (response) {
+          return response;
+        }
+      })
+    );
+  }
+
+  deleteExpense(expenseId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrls.expense}/${expenseId}`).pipe(
       map((response) => {
         if (response) {
           return response;

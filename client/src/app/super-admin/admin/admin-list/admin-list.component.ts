@@ -32,7 +32,6 @@ export class AdminListComponent implements OnInit {
     this.subscription.add(
       this.adminService.fetchAdmins().subscribe((response) => {
         this.adminList = response;
-        console.log(this.adminList);
       })
     );
   }
