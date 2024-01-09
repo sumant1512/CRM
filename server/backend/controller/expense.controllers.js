@@ -7,35 +7,27 @@ const {
 } = require("../middleware/middleware");
 
 const getExpense = async (req, res) => {
-  const {adminId} = req.query
-  
+  const { adminId } = req.params;
+
   const getAllExpenseQuery =
-    "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName,user.last_name as lastName, user.email as email   FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE admin_id = ? and archived = 0 or ex.user_id=?";
-  const getAllExpenseData = [adminId,adminId]
-  
+    "SELECT expenses.id, category_id as categoryId, expense_category.category_name as categoryName, user_id as userId, first_name as firstName, last_name as lastName, expenses.admin_id as adminId, description, expense_amount as expenseAmount, archived, expenses.created_at as createdAt FROM expenses LEFT JOIN user ON user.admin_id = expenses.admin_id LEFT JOIN expense_category on expenses.category_id = expense_category.id where expenses.admin_id =? and archived = 0";
+  const getAllExpenseData = [adminId];
 
   try {
     connectDB
       .query(getAllExpenseQuery, getAllExpenseData)
       .then(([result]) => {
-
         if (result.length <= 0) {
-          // return Promise.reject(new Error('Failed to delete expenses.'));
-          res
-            .status(500)
-            .send({
-              status: false,
-              message: "Failed to fetch expense data.",
-            });
-          // Handle error or inform the user that the email already exists
+          res.status(404).send({
+            status: false,
+            message: "Failed to fetch expense data.sfdkljflsjdlj",
+          });
         } else {
-          res
-            .status(200)
-            .send({
-              status: true,
-              message: "Expense data fetch succesfully.",
-              data: result,
-            });
+          res.status(200).send({
+            status: true,
+            message: "Expense data fetch succesfully.",
+            data: result,
+          });
         }
       })
       .catch((err) => {
@@ -49,11 +41,7 @@ const getExpense = async (req, res) => {
     console.log(err);
     sendResponseError(500, "Something went wrong. Please try again");
   }
-  
 };
-
-
-
 
 const getExpenseById = async (req, res) => {
   const expenseId = req.params.id;
@@ -66,21 +54,17 @@ const getExpenseById = async (req, res) => {
       .then(([result]) => {
         if (result.length <= 0) {
           // return Promise.reject(new Error('Failed to delete expenses.'));
-          res
-            .status(500)
-            .send({
-              status: false,
-              message: "Failed to fetch expense data.",
-            });
+          res.status(500).send({
+            status: false,
+            message: "Failed to fetch expense data.",
+          });
           // Handle error or inform the user that the email already exists
         } else {
-          res
-            .status(200)
-            .send({
-              status: true,
-              message: "Expense data fetch succesfully.",
-              data: result,
-            });
+          res.status(200).send({
+            status: true,
+            message: "Expense data fetch succesfully.",
+            data: result,
+          });
         }
       })
       .catch((err) => {
@@ -93,25 +77,27 @@ const getExpenseById = async (req, res) => {
   } catch (err) {
     sendResponseError(500, "Something went wrong. Please try again");
   }
-  
 };
 
 const addExpense = async (req, res) => {
   try {
-    const { expenseAmount, categoryId, description, userId, adminId } = req.body;
+    const { expenseAmount, categoryId, description, userId, adminId } =
+      req.body;
     const roleType = await incrementTransactionCount(userId, adminId, res);
+    console.log(req.body);
 
     const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
     if (roleType !== "superadmin") {
       const createExpenseQuery =
-        "INSERT INTO expenses_managment.expenses (category_id, user_id, expense_amount, description, archived, created_at, modified_at ) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO expenses_managment.expenses (category_id, user_id, admin_id, expense_amount, description, archived, created_at, modified_at ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
       const updateWalletQuery =
         "UPDATE expenses_managment.wallet SET amount = amount - ?, modified_at = NOW() WHERE user_id = ?";
 
       const expenseData = [
         categoryId,
         userId,
+        adminId,
         expenseAmount,
         description,
         0,
@@ -123,19 +109,30 @@ const addExpense = async (req, res) => {
 
       if (roleType === "admin") {
         if (result.length <= 0) {
-          res.status(404).send({ status: false, message: "Expense is not added." });
+          res
+            .status(404)
+            .send({ status: false, message: "Expense is not added." });
         } else {
-          res.status(200).send({ status: true, message: "Expense added successfully." });
+          res
+            .status(200)
+            .send({ status: true, message: "Expense added successfully." });
         }
       } else {
         const walletData = [expenseAmount, userId];
         if (result) {
-          const [walletResult] = await connectDB.query(updateWalletQuery, walletData);
+          const [walletResult] = await connectDB.query(
+            updateWalletQuery,
+            walletData
+          );
 
           if (walletResult.length <= 0) {
-            res.status(404).send({ status: false, message: "Expense is not added." });
+            res
+              .status(404)
+              .send({ status: false, message: "Expense is not added." });
           } else {
-            res.status(200).send({ status: true, message: "Expense added successfully." });
+            res
+              .status(200)
+              .send({ status: true, message: "Expense added successfully." });
           }
         } else {
           throw new Error("Fail to add Expenses.");
@@ -144,18 +141,22 @@ const addExpense = async (req, res) => {
     } else {
       res.status(400).send({
         status: false,
-        message: "User is not admin or employee. Feature is only for admin and employee.",
+        message:
+          "User is not admin or employee. Feature is only for admin and employee.",
       });
     }
   } catch (err) {
     if (err.message === "Fail to add Expenses.") {
       res.status(500).send({ status: false, message: "Fail to add Expenses." });
     } else {
-      sendResponseError(500, "Error in adding expense. Error- " + err.message, res);
+      sendResponseError(
+        500,
+        "Error in adding expense. Error- " + err.message,
+        res
+      );
     }
   }
 };
-
 
 const updateExpense = async (req, res) => {
   try {
@@ -178,22 +179,37 @@ const updateExpense = async (req, res) => {
       const walletUpdateQuery =
         "UPDATE expenses_managment.wallet SET amount = amount + ? - ?, modified_at = NOW() WHERE user_id = ? ";
 
-      const [result] = await connectDB.query(getExpenseAmountQuery, [expenseId]);
+      const [result] = await connectDB.query(getExpenseAmountQuery, [
+        expenseId,
+      ]);
 
       if (result.length <= 0) {
         throw new Error("Failed to update expenses.");
       }
 
       const oldExpenseAmount = result[0].expense_amount;
-      const expenseUpdatedData = [categoryId, expenseAmount, description, expenseId];
+      const expenseUpdatedData = [
+        categoryId,
+        expenseAmount,
+        description,
+        expenseId,
+      ];
 
-      const [updateResult] = await connectDB.query(expenseUpdateQuery, expenseUpdatedData);
+      const [updateResult] = await connectDB.query(
+        expenseUpdateQuery,
+        expenseUpdatedData
+      );
 
       if (updateResult.length <= 0) {
-        res.status(404).send({ status: false, message: "Expense is not updated." });
+        res
+          .status(404)
+          .send({ status: false, message: "Expense is not updated." });
       } else {
         const walletUpdateData = [oldExpenseAmount, expenseAmount, userId];
-        const [walletResult] = await connectDB.query(walletUpdateQuery, walletUpdateData);
+        const [walletResult] = await connectDB.query(
+          walletUpdateQuery,
+          walletUpdateData
+        );
 
         if (walletResult) {
           res.status(200).send({
@@ -201,20 +217,29 @@ const updateExpense = async (req, res) => {
             message: "Expense is updated successfully.",
           });
         } else {
-          res.status(500).send({ status: false, message: "Failed to update expenses." });
+          res
+            .status(500)
+            .send({ status: false, message: "Failed to update expenses." });
         }
       }
     } else {
       res.status(400).send({
         status: false,
-        message: "User is not admin or employee. Feature is only for admin and employee.",
+        message:
+          "User is not admin or employee. Feature is only for admin and employee.",
       });
     }
   } catch (err) {
     if (err.message === "Failed to update expenses.") {
-      res.status(500).send({ status: false, message: "Failed to update expenses." });
+      res
+        .status(500)
+        .send({ status: false, message: "Failed to update expenses." });
     } else {
-      sendResponseError(500, "Error in updating expense. Error- " + err.message, res);
+      sendResponseError(
+        500,
+        "Error in updating expense. Error- " + err.message,
+        res
+      );
     }
   }
 };
@@ -252,7 +277,6 @@ const deleteExpenseById = async (req, res) => {
     sendResponseError(500, "Something went wrong. Please try again");
     return;
   }
-  
 };
 
 module.exports = {

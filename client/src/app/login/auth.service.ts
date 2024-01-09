@@ -32,7 +32,6 @@ export class AuthService {
 
   logout(): Observable<any> {
     const userId = this.tokenService.getUser().id;
-    console.log(this.tokenService.getUser());
     return this.http.get<any>(`${this.apiUrls.logout}/${userId}`).pipe(
       map((response) => {
         if (response) {

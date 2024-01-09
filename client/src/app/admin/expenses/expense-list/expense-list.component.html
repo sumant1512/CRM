@@ -54,7 +54,12 @@
         <td>{{ expense.categoryName }}</td>
         <td>{{ expense.description }}</td>
         <td>{{ expense.expenseAmount }}</td>
-        <td><i class="fa fa-trash-o me-4"></i></td>
+        <td>
+          <i
+            class="fa fa-trash-o me-4 pointer"
+            (click)="deleteExpense(expense.id)"
+          ></i>
+        </td>
       </tr>
     </tbody>
   </table>
