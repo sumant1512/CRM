@@ -11,9 +11,12 @@ const { verifyUser } = require("../middleware/middleware");
 
 router
   .route("/")
-  .get([verifyUser], getExpense)
   .post([verifyUser], addExpense)
   .put([verifyUser], updateExpense);
+
+router
+  .route("/filter")
+  .post([verifyUser], getExpense)
 
 router
   .route("/:id")

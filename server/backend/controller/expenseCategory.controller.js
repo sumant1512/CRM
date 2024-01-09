@@ -203,7 +203,7 @@ const deleteExpenseCategory = (req, res, next) => {
           message: err.sqlMessage,
         });
       } else {
-        res.status(200).send({ status: true, message: "Expense Deleted" });
+        res.status(200).send({ status: true, message: "Expense category deleted" });
       }
     }
   );
