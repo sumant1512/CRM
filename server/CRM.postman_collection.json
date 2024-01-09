@@ -1376,13 +1376,13 @@
 			},
 			"response": [
 				{
-					"name": "Get All Expense admin with filter",
+					"name": "Get All Expense",
 					"originalRequest": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \r\n    \"userId\":9,\r\n    \"roleId\":2, \r\n    \"categoryId\":null,\r\n    \"startDate\":null,\r\n    \"endDate\":null,\r\n    \"filterUsers\":[13]\r\n  }\r\n\r\n  // if expense is for admin with user filter",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1390,7 +1390,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/expense/filter",
+							"raw": "http://localhost:3000/api/expense/?adminId=9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1399,7 +1399,13 @@
 							"path": [
 								"api",
 								"expense",
-								"filter"
+								""
+							],
+							"query": [
+								{
+									"key": "adminId",
+									"value": "9"
+								}
 							]
 						}
 					},
@@ -1421,15 +1427,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "244"
+							"value": "1107"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"f4-BdHiAIwfNpGCGicb3utONrmTWaM\""
+							"value": "W/\"453-osax7pGHUfns5j8F0yKq+UbCvRs\""
 						},
 						{
 							"key": "Date",
-							"value": "Mon, 08 Jan 2024 20:24:08 GMT"
+							"value": "Tue, 09 Jan 2024 17:30:42 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1441,279 +1447,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetched successfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"categoryId\": 11,\n            \"userId\": 13,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 9,\n            \"roleId\": 3,\n            \"firstName\": \"testuser 3\",\n            \"lastName\": \"user 3\",\n            \"email\": \"user3.main@gmail.com\"\n        }\n    ]\n}"
-				},
-				{
-					"name": "Get All Expense admin without filter",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \r\n    \"userId\":9,\r\n    \"roleId\":2, \r\n    \"categoryId\":null,\r\n    \"startDate\":null,\r\n    \"endDate\":null,\r\n    \"filterUsers\":[]\r\n  }\r\n\r\n  // if expense is for admin without filer",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/expense/filter",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"expense",
-								"filter"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "1110"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"456-5SgvTPuGi4VNcKtZTgOjH6qTqPY\""
-						},
-						{
-							"key": "Date",
-							"value": "Mon, 08 Jan 2024 20:29:46 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetched successfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"categoryId\": 11,\n            \"userId\": 13,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 9,\n            \"roleId\": 3,\n            \"firstName\": \"testuser 3\",\n            \"lastName\": \"user 3\",\n            \"email\": \"user3.main@gmail.com\"\n        },\n        {\n            \"id\": 5,\n            \"categoryId\": 11,\n            \"userId\": 9,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 6,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 434,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 7,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 434,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 8,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 43400,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 9,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 43400,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        }\n    ]\n}"
-				},
-				{
-					"name": "Get All Expense employee filter",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \r\n    \"userId\":13,\r\n    \"roleId\":3, \r\n    \"categoryId\":null,\r\n    \"startDate\":null,\r\n    \"endDate\":null,\r\n    \"filterUsers\":[]\r\n  }\r\n\r\n  // if expense is for employee",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/expense/filter",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"expense",
-								"filter"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "244"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"f4-BdHiAIwfNpGCGicb3utONrmTWaM\""
-						},
-						{
-							"key": "Date",
-							"value": "Mon, 08 Jan 2024 20:30:37 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetched successfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"categoryId\": 11,\n            \"userId\": 13,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 9,\n            \"roleId\": 3,\n            \"firstName\": \"testuser 3\",\n            \"lastName\": \"user 3\",\n            \"email\": \"user3.main@gmail.com\"\n        }\n    ]\n}"
-				},
-				{
-					"name": "Get All Expense with other filters",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \r\n    \"userId\":13,\r\n    \"roleId\":3, \r\n    \"categoryId\":11,\r\n    \"startDate\":\"2023-11-29 00:56:45\",\r\n    \"endDate\":\"2023-12-30 00:56:45\",\r\n    \"filterUsers\":[]\r\n  }\r\n\r\n  // expense with category and start-end date filters",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/expense/filter",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"expense",
-								"filter"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "244"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"f4-BdHiAIwfNpGCGicb3utONrmTWaM\""
-						},
-						{
-							"key": "Date",
-							"value": "Mon, 08 Jan 2024 20:38:10 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetched successfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"categoryId\": 11,\n            \"userId\": 13,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 9,\n            \"roleId\": 3,\n            \"firstName\": \"testuser 3\",\n            \"lastName\": \"user 3\",\n            \"email\": \"user3.main@gmail.com\"\n        }\n    ]\n}"
-				},
-				{
-					"name": "Get All Expense with date filter and all admin data",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \r\n    \"userId\":9,\r\n    \"roleId\":2, \r\n    \"categoryId\":null,\r\n    \"startDate\":\"2023-10-29 00:56:45\",\r\n    \"endDate\":\"2024-01-09 00:30:50\",\r\n    \"filterUsers\":[]\r\n  }\r\n\r\n  // if expense is for admin with date filter",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/expense/filter",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"expense",
-								"filter"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "1110"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"456-5SgvTPuGi4VNcKtZTgOjH6qTqPY\""
-						},
-						{
-							"key": "Date",
-							"value": "Mon, 08 Jan 2024 20:42:33 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetched successfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"categoryId\": 11,\n            \"userId\": 13,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 9,\n            \"roleId\": 3,\n            \"firstName\": \"testuser 3\",\n            \"lastName\": \"user 3\",\n            \"email\": \"user3.main@gmail.com\"\n        },\n        {\n            \"id\": 5,\n            \"categoryId\": 11,\n            \"userId\": 9,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 6,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 434,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 7,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 434,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 8,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 43400,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 9,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 43400,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        }\n    ]\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Expense data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 4,\n            \"categoryId\": 11,\n            \"userId\": 13,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 9,\n            \"roleId\": 3,\n            \"firstName\": \"testuser 3\",\n            \"lastName\": \"user 3\",\n            \"email\": \"user3.main@gmail.com\"\n        },\n        {\n            \"id\": 5,\n            \"categoryId\": 11,\n            \"userId\": 9,\n            \"expenseAmount\": 100,\n            \"description\": \"\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 6,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 434,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 7,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 434,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 8,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 43400,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        },\n        {\n            \"id\": 9,\n            \"categoryId\": 21,\n            \"userId\": 9,\n            \"expenseAmount\": 43400,\n            \"description\": \"fdf\",\n            \"adminId\": 2,\n            \"roleId\": 2,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"admin\",\n            \"email\": \"admin.main@gmail.com\"\n        }\n    ]\n}"
 				}
 			]
 		},

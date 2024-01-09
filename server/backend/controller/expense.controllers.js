@@ -6,119 +6,36 @@ const {
   incrementTransactionCount,
 } = require("../middleware/middleware");
 
-// const getExpense = async (req, res) => {
-//   const {userId,roleId} = req.query
-
-//   if (roleId == 2){
-//     var getAllExpenseQuery =
-//     "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName,user.last_name as lastName, user.email as email   FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE admin_id = ? and archived = 0 or ex.user_id=?";
-//     var getAllExpenseData = [userId,userId]
-//   }
-//   else{
-//     var getAllExpenseQuery =
-//     "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName,user.last_name as lastName, user.email as email  FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON user.id = ex.user_id WHERE user_id = ? and archived = 0";
-//     var getAllExpenseData = [userId]
-    
-//   }
-//     try {
-//     connectDB
-//       .query(getAllExpenseQuery, getAllExpenseData)
-//       .then(([result]) => {
-
-//         if (result.length <= 0) {
-//           // return Promise.reject(new Error('Failed to delete expenses.'));
-//           res
-//             .status(500)
-//             .send({
-//               status: false,
-//               message: "Failed to fetch expense data.",
-//             });
-//           // Handle error or inform the user that the email already exists
-//         } else {
-//           res
-//             .status(200)
-//             .send({
-//               status: true,
-//               message: "Expense data fetch succesfully.",
-//               data: result,
-//             });
-//         }
-//       })
-//       .catch((err) => {
-//         sendResponseError(
-//           500,
-//           "Error in fetching expense. Error- " + err.message,
-//           res
-//         );
-//       });
-//   } catch (err) {
-//     console.log(err);
-//     sendResponseError(500, "Something went wrong. Please try again");
-//   }
-  
-// };
-
-
 const getExpense = async (req, res) => {
-  const { userId, roleId, categoryId, startDate, endDate, filterUsers } = req.body;
-
-  let getAllExpenseQuery;
-  let getAllExpenseData;
-
-  const userIds = Array.isArray(filterUsers) ? filterUsers : [filterUsers]; // Convert to array if filterUsers is a single ID
-
-  if (roleId == 2 && (filterUsers.length <= 0)) {
-    console.log("here!")
-    getAllExpenseQuery =
-      "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName, user.last_name as lastName, user.email as email FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE (admin_id = ? AND archived = 0) OR ex.user_id IN (?)";
-    getAllExpenseData = [userId, userId];
-  }
-  else if (filterUsers.length > 0){
-    console.log("here!!")
-    getAllExpenseQuery =
-      "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName, user.last_name as lastName, user.email as email FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE (archived = 0 AND ex.user_id IN (?))";
-    getAllExpenseData = [userIds];
-  } 
-  else {
-    console.log("here!!!")
-    getAllExpenseQuery =
-      "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName, user.last_name as lastName, user.email as email FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON user.id = ex.user_id WHERE user_id = ? AND archived = 0";
-    getAllExpenseData = [userId];
-  }
-
-
-  if (categoryId) {
-    getAllExpenseQuery += " AND ex.category_id = ?";
-    getAllExpenseData.push(categoryId);
-  }
-
-  if (startDate) {
-    getAllExpenseQuery += " AND ex.created_at >= ?";
-    getAllExpenseData.push(startDate);
-  }
-
-  if (endDate) {
-    getAllExpenseQuery += " AND ex.created_at <= ?";
-    getAllExpenseData.push(endDate);
-  }
-
-  console.log(getAllExpenseQuery)
-  console.log(getAllExpenseData)
+  const {adminId} = req.query
+  
+  const getAllExpenseQuery =
+    "SELECT ex.id, ex.category_id as categoryId, ex.user_id as userId, ex.expense_amount as expenseAmount, ex.description, user.admin_id as adminId, user.role_id as roleId, user.first_name as firstName,user.last_name as lastName, user.email as email   FROM expenses_managment.expenses as ex INNER JOIN expenses_managment.user as user ON ex.user_id = user.id WHERE admin_id = ? and archived = 0 or ex.user_id=?";
+  const getAllExpenseData = [adminId,adminId]
+  
 
   try {
-    connectDB.query(getAllExpenseQuery, getAllExpenseData)
+    connectDB
+      .query(getAllExpenseQuery, getAllExpenseData)
       .then(([result]) => {
+
         if (result.length <= 0) {
-          res.status(500).send({
-            status: false,
-            message: "No expense data to fetch.",
-          });
+          // return Promise.reject(new Error('Failed to delete expenses.'));
+          res
+            .status(500)
+            .send({
+              status: false,
+              message: "Failed to fetch expense data.",
+            });
+          // Handle error or inform the user that the email already exists
         } else {
-          res.status(200).send({
-            status: true,
-            message: "Expense data fetched successfully.",
-            data: result,
-          });
+          res
+            .status(200)
+            .send({
+              status: true,
+              message: "Expense data fetch succesfully.",
+              data: result,
+            });
         }
       })
       .catch((err) => {
@@ -132,7 +49,10 @@ const getExpense = async (req, res) => {
     console.log(err);
     sendResponseError(500, "Something went wrong. Please try again");
   }
+  
 };
+
+
 
 
 const getExpenseById = async (req, res) => {
