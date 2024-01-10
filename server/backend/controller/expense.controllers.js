@@ -10,7 +10,11 @@ const getExpense = async (req, res) => {
   const { adminId } = req.params;
 
   const getAllExpenseQuery =
-    "SELECT expenses.id, category_id as categoryId, expense_category.category_name as categoryName, user_id as userId, first_name as firstName, last_name as lastName, expenses.admin_id as adminId, description, expense_amount as expenseAmount, archived, expenses.created_at as createdAt FROM expenses LEFT JOIN user ON user.admin_id = expenses.admin_id LEFT JOIN expense_category on expenses.category_id = expense_category.id where expenses.admin_id =? and archived = 0";
+    "SELECT expenses.id, category_id as categoryId, expense_category.category_name as categoryName,\
+     user_id as userId, first_name as firstName, last_name as lastName, expenses.admin_id as adminId,\
+      description, expense_amount as expenseAmount, archived, expenses.created_at as createdAt FROM expenses\
+      LEFT JOIN user ON user.id = expenses.user_id\
+      LEFT JOIN expense_category on expenses.category_id = expense_category.id where expenses.admin_id =? and archived = 0";
   const getAllExpenseData = [adminId];
 
   try {
