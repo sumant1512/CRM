@@ -12,15 +12,6 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 export class CategoryService {
   apiUrls: ApiType = AppConfigurations.api;
 
-  categoryies = [
-    {
-      id: 1,
-      categoryName: 'Material',
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-    },
-  ];
-
   constructor(
     private http: HttpClient,
     private tokenService: TokenStorageService

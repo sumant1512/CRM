@@ -84,7 +84,6 @@ const addExpense = async (req, res) => {
     const { expenseAmount, categoryId, description, userId, adminId } =
       req.body;
     const roleType = await incrementTransactionCount(userId, adminId, res);
-    console.log(req.body);
 
     const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 

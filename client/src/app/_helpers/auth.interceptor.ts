@@ -1,4 +1,8 @@
-import { HTTP_INTERCEPTORS, HttpEvent } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpErrorResponse,
+  HttpEvent,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,
@@ -7,7 +11,7 @@ import {
 } from '@angular/common/http';
 
 import { TokenStorageService } from '../_services/token-storage.service';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 
 const TOKEN_HEADER_KEY = 'authorization'; // for Spring Boot back-end
 
@@ -19,14 +23,19 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let authReq = req;
+    let request = req;
     const token = this.token.getToken();
     if (token != null) {
-      authReq = req.clone({
+      request = req.clone({
         headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token),
       });
     }
-    return next.handle(authReq);
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.log(error.error.message);
+        return throwError(() => error);
+      })
+    ) as Observable<HttpEvent<any>>;
   }
 }
 
