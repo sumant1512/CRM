@@ -15,6 +15,7 @@ export interface ApiType {
   addEmployee: string;
   category: string;
   expense: string;
+  wallet: string;
 }
 
 export interface FeatureFlagType {

@@ -1,0 +1,45 @@
+<div class="mb-3">
+  <i class="fa fa-arrow-left back-btn pointer" [routerLink]="['../']"></i>
+</div>
+<form class="row g-3" [formGroup]="addExpenseForm">
+  <div class="col-md-12">
+    <label for="validationDefault01" class="form-label">Description</label>
+    <input
+      formControlName="description"
+      type="text"
+      class="form-control"
+      id="validationDefault01"
+      required
+    />
+  </div>
+  <div class="col-md-6">
+    <label for="validationDefault02" class="form-label">Category</label>
+    <select
+      class="form-select"
+      formControlName="categoryId"
+      aria-label="Default select example"
+    >
+      <option *ngFor="let category of categoryList" [value]="category.id">
+        {{ category.categoryName }}
+      </option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label for="validationDefaultUsername" class="form-label">Point</label>
+    <div class="input-group">
+      <input
+        formControlName="expenseAmount"
+        type="text"
+        class="form-control"
+        id="validationDefaultUsername"
+        aria-describedby="inputGroupPrepend2"
+        required
+      />
+    </div>
+  </div>
+  <div class="col-12 text-center">
+    <button class="btn btn-primary" type="submit" (click)="addExpense()">
+      Submit
+    </button>
+  </div>
+</form>

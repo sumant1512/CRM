@@ -19,6 +19,7 @@ export const AppConfigurations: AppConfigType = {
     activateAdmin: host + '/api/user/activate',
     category: host + '/api/expenseCategory',
     expense: host + '/api/expense',
+    wallet: host + '/api/wallet',
   },
   featureFlags: {
     isSearchFilterActive: true,

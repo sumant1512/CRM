@@ -7,7 +7,7 @@ const {
 } = require("../middleware/middleware");
 
 const getwallet = async (req, res) => {
-  const { user_id, admin_id } = req.query;
+  const { user_id, admin_id } = req.params;
   const roleType = await incrementTransactionCount(user_id, admin_id, res);
 
   if (roleType != "superadmin" && roleType != "employee") {
@@ -23,13 +23,11 @@ const getwallet = async (req, res) => {
               .send({ status: false, message: "Failed to fetch wallet data." });
             // Handle error or inform the user that the email already exists
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Wallet data fetch succesfully.",
-                data: result,
-              });
+            res.status(200).send({
+              status: true,
+              message: "Wallet data fetch succesfully.",
+              data: result,
+            });
           }
         })
         .catch((err) => {
@@ -44,12 +42,10 @@ const getwallet = async (req, res) => {
       sendResponseError(500, "Something went wrong. Please try again");
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin.",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin.",
+    });
   }
 };
 
@@ -72,12 +68,10 @@ const addwallet = async (req, res) => {
               .send({ status: false, message: "Failed to add wallet data." });
             // Handle error or inform the user that the email already exists
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Wallet data added succesfully.",
-              });
+            res.status(200).send({
+              status: true,
+              message: "Wallet data added succesfully.",
+            });
           }
         })
         .catch((err) => {
@@ -92,12 +86,10 @@ const addwallet = async (req, res) => {
       sendResponseError(500, "Something went wrong. Please try again");
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin.",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin.",
+    });
   }
 };
 
@@ -115,20 +107,16 @@ const updatewallet = async (req, res) => {
         .then(([result]) => {
           if (result.length <= 0) {
             // return Promise.reject(new Error('Failed to delete expenses.'));
-            res
-              .status(500)
-              .send({
-                status: false,
-                message: "Failed to update wallet data.",
-              });
+            res.status(500).send({
+              status: false,
+              message: "Failed to update wallet data.",
+            });
             // Handle error or inform the user that the email already exists
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Wallet data updated succesfully.",
-              });
+            res.status(200).send({
+              status: true,
+              message: "Wallet data updated succesfully.",
+            });
           }
         })
         .catch((err) => {
@@ -143,12 +131,10 @@ const updatewallet = async (req, res) => {
       sendResponseError(500, "Something went wrong. Please try again");
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin.",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin.",
+    });
   }
 };
 
@@ -172,13 +158,11 @@ const getwalletById = async (req, res) => {
               .send({ status: false, message: "Failed to fetch wallet data." });
             // Handle error or inform the user that the email already exists
           } else {
-            res
-              .status(200)
-              .send({
-                status: true,
-                message: "Wallet data fetch succesfully.",
-                data: result,
-              });
+            res.status(200).send({
+              status: true,
+              message: "Wallet data fetch succesfully.",
+              data: result,
+            });
           }
         })
         .catch((err) => {
@@ -193,12 +177,10 @@ const getwalletById = async (req, res) => {
       sendResponseError(500, "Something went wrong. Please try again");
     }
   } else {
-    res
-      .status(400)
-      .send({
-        status: false,
-        message: "User is not admin. Feature is only for admin.",
-      });
+    res.status(400).send({
+      status: false,
+      message: "User is not admin. Feature is only for admin.",
+    });
   }
 };
 
