@@ -1,1 +1,35 @@
-<p>add-wallet-money works!</p>
+<div class="mb-3">
+  <i class="fa fa-arrow-left back-btn pointer" [routerLink]="['../']"></i>
+</div>
+<form class="row g-3" [formGroup]="addWalletMoneyForm">
+  <div class="col-md-6">
+    <label for="validationDefault02" class="form-label">Employee</label>
+    <select
+      class="form-select"
+      formControlName="userId"
+      aria-label="Default select example"
+    >
+      <option *ngFor="let employee of employeeList" [value]="employee.id">
+        {{ employee.firstName }} {{ employee.lastName }}
+      </option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label for="validationDefaultUsername" class="form-label">Point</label>
+    <div class="input-group">
+      <input
+        formControlName="amount"
+        type="text"
+        class="form-control"
+        id="validationDefaultUsername"
+        aria-describedby="inputGroupPrepend2"
+        required
+      />
+    </div>
+  </div>
+  <div class="col-12 text-center">
+    <button class="btn btn-primary" type="submit" (click)="addMoneyToWallet()">
+      Submit
+    </button>
+  </div>
+</form>
