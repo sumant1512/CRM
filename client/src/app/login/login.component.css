@@ -10,6 +10,7 @@
   align-items: center;
   min-height: 100vh;
   background: #1f293a;
+  overflow: hidden;
 }
 .container {
   position: relative;
