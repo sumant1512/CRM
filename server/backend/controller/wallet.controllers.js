@@ -7,14 +7,12 @@ const {
 } = require("../middleware/middleware");
 
 const getwallet = async (req, res) => {
-  const { user_id, admin_id } = req.params;
-  const roleType = await incrementTransactionCount(user_id, admin_id, res);
-
-  if (roleType != "superadmin" && roleType != "employee") {
-    const getWalletsQuery = "SELECT * FROM expenses_managment.wallet ";
+    adminId = req.query.adminId
+    
+    const getWalletsQuery = "SELECT * FROM expenses_managment.wallet WHERE admin_id=?";
     try {
       connectDB
-        .query(getWalletsQuery)
+        .query(getWalletsQuery,[adminId])
         .then(([result]) => {
           if (result.length <= 0) {
             // return Promise.reject(new Error('Failed to delete expenses.'));
@@ -41,22 +39,16 @@ const getwallet = async (req, res) => {
       console.log(err);
       sendResponseError(500, "Something went wrong. Please try again");
     }
-  } else {
-    res.status(400).send({
-      status: false,
-      message: "User is not admin. Feature is only for admin.",
-    });
-  }
+  
 };
 
 const addwallet = async (req, res) => {
-  const { user_id, admin_id, amount } = req.body;
-  const roleType = await incrementTransactionCount(user_id, admin_id, res);
+  const { userId, adminId, amount } = req.body;
+  // const roleType = await incrementTransactionCount(user_id, admin_id, res);
 
-  if (roleType != "superadmin" && roleType != "employee") {
-    const wallet_data = [user_id, amount];
+    const wallet_data = [userId, amount, adminId];
     const addWalletQuery =
-      "INSERT INTO expenses_managment.wallet (user_id,amount,created_at,modified_at) VALUES (?, ?,NOW(), NOW())";
+      "INSERT INTO expenses_managment.wallet (user_id,amount,created_at,modified_at,admin_id) VALUES (?, ?,NOW(), NOW(), ?)";
     try {
       connectDB
         .query(addWalletQuery, wallet_data)
@@ -85,20 +77,13 @@ const addwallet = async (req, res) => {
       console.log(err);
       sendResponseError(500, "Something went wrong. Please try again");
     }
-  } else {
-    res.status(400).send({
-      status: false,
-      message: "User is not admin. Feature is only for admin.",
-    });
-  }
+  
 };
 
 const updatewallet = async (req, res) => {
-  const { user_id, admin_id, amount, wallet_id } = req.body;
-  const roleType = await incrementTransactionCount(user_id, admin_id, res);
-
-  if (roleType != "superadmin" && roleType != "employee") {
-    const wallet_data = [amount, wallet_id];
+  const { amount, walletId } = req.body;
+  
+    const wallet_data = [amount, walletId];
     const updateWalletQuery =
       "UPDATE expenses_managment.wallet SET amount = ?,modified_at = NOW() WHERE id = ?";
     try {
@@ -130,26 +115,17 @@ const updatewallet = async (req, res) => {
       console.log(err);
       sendResponseError(500, "Something went wrong. Please try again");
     }
-  } else {
-    res.status(400).send({
-      status: false,
-      message: "User is not admin. Feature is only for admin.",
-    });
-  }
+  
 };
 
 const getwalletById = async (req, res) => {
-  const wallet_id = req.params.id;
+  const walletId = req.params.id;
 
-  const { user_id, admin_id } = req.query;
-  const roleType = await incrementTransactionCount(user_id, admin_id, res);
-
-  if (roleType != "superadmin" && roleType != "employee") {
     const getWalletsQuery =
       "SELECT * FROM expenses_managment.wallet WHERE id=?";
     try {
       connectDB
-        .query(getWalletsQuery, [wallet_id])
+        .query(getWalletsQuery, [walletId])
         .then(([result]) => {
           if (result.length <= 0) {
             // return Promise.reject(new Error('Failed to delete expenses.'));
@@ -176,12 +152,7 @@ const getwalletById = async (req, res) => {
       console.log(err);
       sendResponseError(500, "Something went wrong. Please try again");
     }
-  } else {
-    res.status(400).send({
-      status: false,
-      message: "User is not admin. Feature is only for admin.",
-    });
-  }
+  
 };
 
 module.exports = {
