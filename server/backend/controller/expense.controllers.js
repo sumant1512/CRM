@@ -22,9 +22,9 @@ const getExpense = async (req, res) => {
       .query(getAllExpenseQuery, getAllExpenseData)
       .then(([result]) => {
         if (result.length <= 0) {
-          res.status(404).send({
+          res.status(200).send({
             status: false,
-            message: "Failed to fetch expense data.sfdkljflsjdlj",
+            message: "No expense data to show.",
           });
         } else {
           res.status(200).send({

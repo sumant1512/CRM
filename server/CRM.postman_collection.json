@@ -1117,6 +1117,14 @@
 			]
 		},
 		{
+			"name": "Delete Expense Category",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
 			"name": "Add Expense",
 			"request": {
 				"auth": {
@@ -1677,7 +1685,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/wallet/?user_id=1&admin_id=1",
+							"raw": "http://localhost:3000/api/wallet/?adminId=9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1691,11 +1699,12 @@
 							"query": [
 								{
 									"key": "user_id",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
-									"key": "admin_id",
-									"value": "1"
+									"key": "adminId",
+									"value": "9"
 								}
 							]
 						}
@@ -1718,15 +1727,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "393"
+							"value": "197"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"189-N+YO8EQ1U8tzUVjhFkAAbf21Da8\""
+							"value": "W/\"c5-5C8xRSwtUfVdI9ySwLCrpWJMGaY\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 20:10:33 GMT"
+							"value": "Thu, 11 Jan 2024 19:11:57 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1738,7 +1747,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Wallet data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"amount\": 0,\n            \"created_at\": null,\n            \"modified_at\": null\n        },\n        {\n            \"id\": 2,\n            \"user_id\": 2,\n            \"amount\": 0,\n            \"created_at\": null,\n            \"modified_at\": null\n        },\n        {\n            \"id\": 3,\n            \"user_id\": 3,\n            \"amount\": -300,\n            \"created_at\": null,\n            \"modified_at\": \"2023-12-28T18:14:44.000Z\"\n        },\n        {\n            \"id\": 4,\n            \"user_id\": 4,\n            \"amount\": -200,\n            \"created_at\": null,\n            \"modified_at\": \"2023-12-28T19:26:45.000Z\"\n        }\n    ]\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Wallet data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 24,\n            \"user_id\": 17,\n            \"amount\": 100,\n            \"created_at\": \"2024-01-11T19:05:01.000Z\",\n            \"modified_at\": \"2024-01-11T19:05:01.000Z\",\n            \"admin_id\": 9\n        }\n    ]\n}"
 				}
 			]
 		},
@@ -1788,7 +1797,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\":\"1\",\r\n    \"admin_id\":\"1\",\r\n    \"amount\":0\r\n\r\n}",
+							"raw": "{\r\n    \"userId\":\"1\",\r\n    \"adminId\":\"1\",\r\n    \"amount\":100010100\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1835,7 +1844,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 20:36:01 GMT"
+							"value": "Thu, 11 Jan 2024 19:11:24 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1859,13 +1868,13 @@
 			},
 			"response": [
 				{
-					"name": "Wallet Update",
+					"name": "New Request",
 					"originalRequest": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\":\"1\",\r\n    \"admin_id\":\"1\",\r\n    \"amount\":1000,\r\n    \"wallet_id\":1\r\n\r\n}",
+							"raw": "{\r\n    \r\n    \"amount\":1000,\r\n    \"walletId\":1\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1912,7 +1921,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 28 Dec 2023 20:35:42 GMT"
+							"value": "Thu, 11 Jan 2024 19:13:20 GMT"
 						},
 						{
 							"key": "Connection",
