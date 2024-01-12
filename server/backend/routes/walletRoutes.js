@@ -8,12 +8,8 @@ const {
 } = require("../controller/wallet.controllers");
 const { verifyUser } = require("../middleware/middleware");
 
-router
-  .route("/")
-  .get([verifyUser], getwallet)
-  .post([verifyUser], addwallet)
-  .put([verifyUser], updatewallet);
+router.route("/").post([verifyUser], addwallet).put([verifyUser], updatewallet);
 
-router.get("/:id", [verifyUser], getwalletById);
+router.get("/:adminId", [verifyUser], getwallet);
 
 module.exports = router;
