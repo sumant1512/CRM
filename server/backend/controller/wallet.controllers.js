@@ -10,7 +10,9 @@ const getwallet = async (req, res) => {
   adminId = req.params.adminId;
 
   const getWalletsQuery =
-    "SELECT wallet.id, wallet.admin_id as adminId, user_id as userId, first_name as firstName, last_name as lastName, amount as amount, wallet.created_at as createdAt FROM wallet LEFT JOIN user ON user.id = wallet.user_id where wallet.admin_id =?";
+    "SELECT wallet.id, wallet.admin_id as adminId, user_id as userId, first_name as firstName,\
+    last_name as lastName, amount as amount, wallet.created_at as createdAt FROM wallet\
+    LEFT JOIN user ON user.id = wallet.user_id where wallet.admin_id =?";
   try {
     connectDB
       .query(getWalletsQuery, [adminId])
