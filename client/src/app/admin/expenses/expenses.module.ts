@@ -6,20 +6,10 @@ import { ExpensesComponent } from './expenses.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { AddExpenseComponent } from './add-expense/add-expense.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FilterPipe } from 'src/app/_pipes/filter.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    ExpensesComponent,
-    ExpenseListComponent,
-    AddExpenseComponent,
-    FilterPipe,
-  ],
-  imports: [
-    CommonModule,
-    ExpensesRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  declarations: [ExpensesComponent, ExpenseListComponent, AddExpenseComponent],
+  imports: [ExpensesRoutingModule, SharedModule],
 })
 export class ExpensesModule {}
