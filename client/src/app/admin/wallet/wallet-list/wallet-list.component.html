@@ -4,20 +4,17 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
-        <th scope="col">Action</th>
+        <th scope="col">Points</th>
       </tr>
     </thead>
     <tbody>
-      <!-- <tr *ngFor="let wallet of walletList">
-          <th scope="row">{{ wallet.id }}</th>
-          <td>{{ wallet.walletName }}</td>
-          <td>
-            <i
-              class="fa fa-trash-o me-4 pointer"
-            ></i
-            ><i class="fa fa-edit pointer"></i>
-          </td>
-        </tr> -->
+      <tr *ngFor="let wallet of walletList">
+        <th scope="row">{{ wallet.id }}</th>
+        <td>{{ wallet.firstName }} {{ wallet.lastName }}</td>
+        <td>
+          {{ wallet.amount }}
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>
