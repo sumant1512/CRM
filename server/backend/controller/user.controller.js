@@ -67,22 +67,32 @@ const registerUser = async (req, res) => {
         const [registerResult] = await connectDB.query(registerQuery, userData);
 
         if (registerResult && registerResult.insertId) {
-          const [walletResult] = await connectDB.query(
-            "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount, created_at, modified_at, admin_id) VALUES (?, ?, NOW(), NOW(), ?)",
-            [registerResult.insertId, 0,adminId]
-          );
+          if (roleId != 1){  
+            const [walletResult] = await connectDB.query(
+              "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount, created_at, modified_at, admin_id) VALUES (?, ?, NOW(), NOW(), ?)",
+              [registerResult.insertId, 0,adminId]
+            );
 
-          if (walletResult.affectedRows === 1) {
-            return res.status(201).send({
-              status: true,
-              message: "Successfully account registered.",
-              data: {},
-            });
-          } else {
+            if (walletResult.affectedRows === 1) {
+              return res.status(201).send({
+                status: true,
+                message: "Successfully account registered.",
+                data: {},
+              });
+            } else {
+              return res.status(201).send({
+                status: true,
+                message:
+                  "Successfully account registered. Wallet already exists for the user.",
+                data: {},
+              });
+            }
+          }
+          else {
             return res.status(201).send({
               status: true,
               message:
-                "Successfully account registered. Wallet already exists for the user.",
+                "Successfully superadmin registered.",
               data: {},
             });
           }

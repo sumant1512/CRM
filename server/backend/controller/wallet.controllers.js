@@ -45,42 +45,57 @@ const getwallet = async (req, res) => {
 };
 
 
-const updatewallet = async (req, res) => {
-  const { amount, walletId } = req.body;
-
-  const wallet_data = [amount, walletId];
-  const updateWalletQuery =
-    "UPDATE expenses_managment.wallet SET amount = amount + ?,modified_at = NOW() WHERE id = ?";
+const updateWallet = async (req, res) => {
   try {
-    connectDB
-      .query(updateWalletQuery, wallet_data)
-      .then(([result]) => {
-        if (result.length <= 0) {
-          // return Promise.reject(new Error('Failed to delete expenses.'));
-          res.status(500).send({
-            status: false,
-            message: "Failed to update wallet data.",
-          });
-          // Handle error or inform the user that the email already exists
-        } else {
-          res.status(200).send({
-            status: true,
-            message: "Wallet data updated succesfully.",
-          });
-        }
-      })
-      .catch((err) => {
-        sendResponseError(
-          500,
-          "Error in updating Wallet. Error- " + err.message,
-          res
-        );
+    const { amount, walletId, adminId } = req.body;
+
+    // Begin the transaction
+    await connectDB.query("START TRANSACTION");
+
+    const walletData = [amount, walletId];
+    const updateWalletQuery =
+      "UPDATE expenses_managment.wallet SET amount = amount + ?, modified_at = NOW() WHERE id = ?";
+
+    const [result] = await connectDB.query(updateWalletQuery, walletData);
+
+    if (result.affectedRows <= 0) {
+      // Rollback the transaction if the first query fails
+      await connectDB.query("ROLLBACK");
+      res.status(500).send({
+        status: false,
+        message: "Failed to update wallet data.",
       });
+    } else {
+      const adminWalletData = [amount, adminId];
+      const updateAdminWalletQuery =
+        "UPDATE expenses_managment.wallet SET amount = amount - ?, modified_at = NOW() WHERE user_id = ?";
+
+      const [adminResult] = await connectDB.query(updateAdminWalletQuery, adminWalletData);
+
+      console.log(adminResult)
+      if (adminResult.affectedRows <= 0) {
+        // Rollback the transaction if the second query fails
+        await connectDB.query("ROLLBACK");
+        res.status(500).send({
+          status: false,
+          message: "Failed to update admin wallet data.",
+        });
+      } else {
+        // Commit the transaction if both queries succeed
+        await connectDB.query("COMMIT");
+        res.status(200).send({
+          status: true,
+          message: "Wallet data updated successfully.",
+        });
+      }
+    }
   } catch (err) {
-    console.log(err);
-    sendResponseError(500, "Something went wrong. Please try again");
+    console.error(err);
+    sendResponseError(500, "Something went wrong. Please try again", res);
   }
 };
+
+
 
 const getwalletById = async (req, res) => {
   const walletId = req.params.id;
@@ -119,6 +134,6 @@ const getwalletById = async (req, res) => {
 
 module.exports = {
   getwallet,
-  updatewallet,
+  updateWallet,
   getwalletById,
 };
