@@ -721,6 +721,99 @@
 			]
 		},
 		{
+			"name": "Get Point By User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0OTk5MjI5LCJleHAiOjE3MTM2MzkyMjl9.TgcqSllNPYF5anlxlAK18aUGjpQjcBjMOh0EYvlgOBg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/point/17",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"point",
+						"17"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/point/17",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"point",
+								"17"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "120"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"78-ZzXBVBt8SfM9Lzd3SD6MuQGCuIM\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 13 Jan 2024 16:34:19 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": false,\n    \"message\": \"User data fetched succesfully.\",\n    \"data\": {\n        \"0\": {\n            \"id\": 22,\n            \"userId\": 17,\n            \"amount\": 0,\n            \"adminId\": null\n        }\n    }\n}"
+				}
+			]
+		},
+		{
 			"name": "Get Admins",
 			"request": {
 				"auth": {
@@ -1660,12 +1753,22 @@
 			]
 		},
 		{
-			"name": "Get Wallets",
+			"name": "Get Wallets by admin id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzA0OTk5MjI5LCJleHAiOjE3MTM2MzkyMjl9.TgcqSllNPYF5anlxlAK18aUGjpQjcBjMOh0EYvlgOBg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/wallet/",
+					"raw": "http://localhost:3000/api/wallet/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1674,18 +1777,30 @@
 					"path": [
 						"api",
 						"wallet",
-						""
+						"1"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "adminId",
+							"value": "1",
+							"disabled": true
+						}
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Get Wallets",
+					"name": "Get Wallets by admin id",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/wallet/?adminId=9",
+							"raw": "http://localhost:3000/api/wallet/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1694,7 +1809,7 @@
 							"path": [
 								"api",
 								"wallet",
-								""
+								"1"
 							],
 							"query": [
 								{
@@ -1704,7 +1819,8 @@
 								},
 								{
 									"key": "adminId",
-									"value": "9"
+									"value": "1",
+									"disabled": true
 								}
 							]
 						}
@@ -1727,15 +1843,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "197"
+							"value": "364"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"c5-5C8xRSwtUfVdI9ySwLCrpWJMGaY\""
+							"value": "W/\"16c-C3LgeJPdaiHqWfkN0ANMNJZ/YNc\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 11 Jan 2024 19:11:57 GMT"
+							"value": "Sat, 13 Jan 2024 16:54:17 GMT"
 						},
 						{
 							"key": "Connection",
@@ -1747,116 +1863,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Wallet data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 24,\n            \"user_id\": 17,\n            \"amount\": 100,\n            \"created_at\": \"2024-01-11T19:05:01.000Z\",\n            \"modified_at\": \"2024-01-11T19:05:01.000Z\",\n            \"admin_id\": 9\n        }\n    ]\n}"
-				}
-			]
-		},
-		{
-			"name": "Add Wallet",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzAzMTk2MzgzLCJleHAiOjE3MTE4MzYzODN9.ggIezGcC8sXc9PyygURHc9yrbLcYnmoEJSrbXKMxtS8",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"user_id\":\"1\",\r\n    \"admin_id\":\"1\",\r\n    \"amount\":0\r\n\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/api/wallet/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"wallet",
-						""
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Add Wallet",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userId\":\"1\",\r\n    \"adminId\":\"1\",\r\n    \"amount\":100010100\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/wallet/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"wallet",
-								""
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "58"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"3a-mBJsBUZMiQo8I9GhegHI7hbDKIo\""
-						},
-						{
-							"key": "Date",
-							"value": "Thu, 11 Jan 2024 19:11:24 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": true,\n    \"message\": \"Wallet data added succesfully.\"\n}"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Wallet data fetch succesfully.\",\n    \"data\": [\n        {\n            \"id\": 19,\n            \"adminId\": 1,\n            \"userId\": 14,\n            \"firstName\": \"admin 1\",\n            \"lastName\": \"admin1\",\n            \"amount\": 0,\n            \"createdAt\": null,\n            \"modifiedAt\": null\n        },\n        {\n            \"id\": 25,\n            \"adminId\": 1,\n            \"userId\": 1,\n            \"firstName\": \"testadmin\",\n            \"lastName\": \"tester\",\n            \"amount\": 100010100,\n            \"createdAt\": \"2024-01-11T19:11:24.000Z\",\n            \"modifiedAt\": \"2024-01-11T19:11:24.000Z\"\n        }\n    ]\n}"
 				}
 			]
 		},

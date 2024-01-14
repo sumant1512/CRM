@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const {
   getwallet,
-  addwallet,
-  updatewallet,
+  updateWallet,
   getwalletById,
 } = require("../controller/wallet.controllers");
 const { verifyUser } = require("../middleware/middleware");
 
-router.route("/").post([verifyUser], addwallet).put([verifyUser], updatewallet);
+router.route("/")
+      .put([verifyUser], updateWallet);
 
 router.get("/:adminId", [verifyUser], getwallet);
 
