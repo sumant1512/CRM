@@ -67,22 +67,32 @@ const registerUser = async (req, res) => {
         const [registerResult] = await connectDB.query(registerQuery, userData);
 
         if (registerResult && registerResult.insertId) {
-          const [walletResult] = await connectDB.query(
-            "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount) VALUES (?, ?)",
-            [registerResult.insertId, 0]
-          );
+          if (roleId != 1){  
+            const [walletResult] = await connectDB.query(
+              "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount, created_at, modified_at, admin_id) VALUES (?, ?, NOW(), NOW(), ?)",
+              [registerResult.insertId, 0,adminId]
+            );
 
-          if (walletResult.affectedRows === 1) {
-            return res.status(201).send({
-              status: true,
-              message: "Successfully account registered.",
-              data: {},
-            });
-          } else {
+            if (walletResult.affectedRows === 1) {
+              return res.status(201).send({
+                status: true,
+                message: "Successfully account registered.",
+                data: {},
+              });
+            } else {
+              return res.status(201).send({
+                status: true,
+                message:
+                  "Successfully account registered. Wallet already exists for the user.",
+                data: {},
+              });
+            }
+          }
+          else {
             return res.status(201).send({
               status: true,
               message:
-                "Successfully account registered. Wallet already exists for the user.",
+                "Successfully superadmin registered.",
               data: {},
             });
           }
@@ -408,6 +418,44 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const getPointByUserId = async (req, res) => {
+  const user_id = req.params.id;
+  console.log(user_id)
+  const getUserQuery =
+    "SELECT  id, user_id as userId, amount, admin_id as adminId FROM expenses_managment.wallet WHERE user_id=? ";
+  try {
+    connectDB
+      .query(getUserQuery, [user_id])
+      .then(([result]) => {
+        if (result.length <= 0) {
+          res
+            .status(404)
+            .send({ status: false, message: "Unable to fetch users data." });
+        } else {
+          const response = {
+            ...result
+          };
+          res.status(200).send({
+            status: false,
+            message: "User data fetched succesfully.",
+            data: response,
+          });
+        }
+      })
+      .catch((err) => {
+        sendResponseError(
+          500,
+          "Unable to fetch users data.. Error- " + err.message,
+          res
+        );
+      });
+  } catch (err) {
+    sendResponseError(500, "Something wrong please try again");
+    return;
+  }
+  
+};
+
 const logout = async (req, res) => {
   const user_id = req.params.id;
 
@@ -443,4 +491,5 @@ module.exports = {
   resetPassword,
   getUserById,
   logout,
+  getPointByUserId,
 };

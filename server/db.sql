@@ -38,13 +38,11 @@ CREATE TABLE `user` (
 CREATE TABLE `expense_category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category_name` varchar(50) NOT NULL,
-  `admin_id` int NOT NULL,
+  `admin_id` int DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `modified_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `admin_id` (`admin_id`),
-  CONSTRAINT `expense_category_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `expenses` (
   `id` int NOT NULL AUTO_INCREMENT,
