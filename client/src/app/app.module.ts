@@ -10,9 +10,10 @@ import { LoginComponent } from './login/login.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { LandingComponent } from './landing/landing.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ErrorModalComponent } from './error-modal/error-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, LandingComponent],
+  declarations: [AppComponent, LoginComponent, LandingComponent, ErrorModalComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

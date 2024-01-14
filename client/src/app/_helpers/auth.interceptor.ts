@@ -12,12 +12,16 @@ import {
 
 import { TokenStorageService } from '../_services/token-storage.service';
 import { Observable, catchError, throwError } from 'rxjs';
+import { ErrorService } from '../error-modal/error.service';
 
 const TOKEN_HEADER_KEY = 'authorization'; // for Spring Boot back-end
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private token: TokenStorageService) {}
+  constructor(
+    private token: TokenStorageService,
+    private errorService: ErrorService
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -32,7 +36,11 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log(error.error.message);
+        if (error.status === 0) {
+          this.errorService.setError('Opps!!!');
+        } else {
+          this.errorService.setError(error.error.message);
+        }
         return throwError(() => error);
       })
     ) as Observable<HttpEvent<any>>;
