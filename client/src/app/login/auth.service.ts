@@ -30,6 +30,16 @@ export class AuthService {
     );
   }
 
+  getUserPoints(userId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrls.points}/${userId}`).pipe(
+      map((response) => {
+        if (response) {
+          return response.data;
+        }
+      })
+    );
+  }
+
   logout(): Observable<any> {
     const userId = this.tokenService.getUser().id;
     return this.http.get<any>(`${this.apiUrls.logout}/${userId}`).pipe(
