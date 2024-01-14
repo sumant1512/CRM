@@ -44,7 +44,6 @@ const getwallet = async (req, res) => {
   }
 };
 
-
 const updateWallet = async (req, res) => {
   try {
     const { amount, walletId, adminId } = req.body;
@@ -70,9 +69,12 @@ const updateWallet = async (req, res) => {
       const updateAdminWalletQuery =
         "UPDATE expenses_managment.wallet SET amount = amount - ?, modified_at = NOW() WHERE user_id = ?";
 
-      const [adminResult] = await connectDB.query(updateAdminWalletQuery, adminWalletData);
+      const [adminResult] = await connectDB.query(
+        updateAdminWalletQuery,
+        adminWalletData
+      );
 
-      console.log(adminResult)
+      console.log(adminResult);
       if (adminResult.affectedRows <= 0) {
         // Rollback the transaction if the second query fails
         await connectDB.query("ROLLBACK");
@@ -94,8 +96,6 @@ const updateWallet = async (req, res) => {
     sendResponseError(500, "Something went wrong. Please try again", res);
   }
 };
-
-
 
 const getwalletById = async (req, res) => {
   const walletId = req.params.id;
