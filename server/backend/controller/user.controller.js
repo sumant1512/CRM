@@ -67,10 +67,10 @@ const registerUser = async (req, res) => {
         const [registerResult] = await connectDB.query(registerQuery, userData);
 
         if (registerResult && registerResult.insertId) {
-          if (roleId != 1){  
+          if (roleId != 1) {
             const [walletResult] = await connectDB.query(
               "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount, created_at, modified_at, admin_id) VALUES (?, ?, NOW(), NOW(), ?)",
-              [registerResult.insertId, 0,adminId]
+              [registerResult.insertId, 0, adminId]
             );
 
             if (walletResult.affectedRows === 1) {
@@ -87,12 +87,10 @@ const registerUser = async (req, res) => {
                 data: {},
               });
             }
-          }
-          else {
+          } else {
             return res.status(201).send({
               status: true,
-              message:
-                "Successfully superadmin registered.",
+              message: "Successfully superadmin registered.",
               data: {},
             });
           }
@@ -122,7 +120,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const loginQuery =
-    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive  FROM expenses_managment.user WHERE email=?";
+    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive, mobile_number as phone  FROM expenses_managment.user WHERE email=?";
   const updateLoginLoggedQuery =
     "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
 
@@ -420,9 +418,9 @@ const resetPassword = async (req, res) => {
 
 const getPointByUserId = async (req, res) => {
   const user_id = req.params.id;
-  console.log(user_id)
+  console.log(user_id);
   const getUserQuery =
-    "SELECT  id, user_id as userId, amount, admin_id as adminId FROM expenses_managment.wallet WHERE user_id=? ";
+    "SELECT  user_id as userId, amount FROM expenses_managment.wallet WHERE user_id=? ";
   try {
     connectDB
       .query(getUserQuery, [user_id])
@@ -432,13 +430,10 @@ const getPointByUserId = async (req, res) => {
             .status(404)
             .send({ status: false, message: "Unable to fetch users data." });
         } else {
-          const response = {
-            ...result
-          };
           res.status(200).send({
             status: false,
             message: "User data fetched succesfully.",
-            data: response,
+            data: result[0],
           });
         }
       })
@@ -453,7 +448,6 @@ const getPointByUserId = async (req, res) => {
     sendResponseError(500, "Something wrong please try again");
     return;
   }
-  
 };
 
 const logout = async (req, res) => {

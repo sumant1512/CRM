@@ -1,35 +1,29 @@
 <div class="card">
   <div class="card-header">Profile</div>
   <div class="card-body">
-    <div class="row mb-3">
-      <div class="fw-bold col-12 col-md-3 mb-1">
+    <div class="row">
+      <div class="fw-bold col-3">
         Name <span class="d-none d-md-block float-end">:</span>
       </div>
-      <div class="col-12 col-md-9">Dummy Data</div>
+      <div class="col-9">{{ userInfo.firstName }} {{ userInfo.lastName }}</div>
     </div>
-    <div class="row mb-3">
-      <div class="fw-bold col-12 col-md-3 mb-1">
-        Address <span class="d-none d-md-block float-end">:</span>
-      </div>
-      <div class="col-12 col-md-9">Dummy Data</div>
-    </div>
-    <div class="row mb-3">
-      <div class="fw-bold col-12 col-md-3 mb-1">
+    <div class="row">
+      <div class="fw-bold col-3">
         Phone <span class="d-none d-md-block float-end">:</span>
       </div>
-      <div class="col-12 col-md-9">Dummy Data</div>
+      <div class="col-9">{{ userInfo.phone }}</div>
     </div>
-    <div class="row mb-3">
-      <div class="fw-bold col-12 col-md-3 mb-1">
+    <div class="row">
+      <div class="fw-bold col-3">
         Email <span class="d-none d-md-block float-end">:</span>
       </div>
-      <div class="col-12 col-md-9">Dummy Data</div>
+      <div class="col-9">{{ userInfo.email }}</div>
     </div>
-    <div class="row mb-3">
-      <div class="fw-bold col-12 col-md-3 mb-1">
+    <div class="row">
+      <div class="fw-bold col-3">
         Points <span class="d-none d-md-block float-end">:</span>
       </div>
-      <div class="col-12 col-md-9">Dummy Data</div>
+      <div class="col-9">{{ userPoints }}</div>
     </div>
   </div>
 </div>

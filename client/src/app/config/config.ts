@@ -20,6 +20,7 @@ export const AppConfigurations: AppConfigType = {
     category: host + '/api/expenseCategory',
     expense: host + '/api/expense',
     wallet: host + '/api/wallet',
+    points: host + '/api/user/point',
   },
   featureFlags: {
     isSearchFilterActive: true,
