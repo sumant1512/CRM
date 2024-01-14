@@ -26,15 +26,11 @@ export class AddWalletMoneyComponent {
   ) {}
 
   ngOnInit(): void {
-    this.getEmployeeList();
-  }
-
-  getEmployeeList(): void {
-    this.subscription.add(
-      this.employeeService.fetchEmployees().subscribe((response: any) => {
-        this.employeeList = response;
-      })
-    );
+    if (history?.state?.walletId) {
+      this.addWalletMoneyForm.patchValue({ walletId: history.state.walletId });
+    } else {
+      this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+    }
   }
 
   addMoneyToWallet() {

@@ -24,7 +24,7 @@ export class WalletService {
   }
 
   addMoneyToWallet(body: IAddWalletMoneyRequestBody): Observable<any> {
-    return this.http.post<any>(this.apiUrls.wallet, body).pipe(
+    return this.http.put<any>(this.apiUrls.wallet, body).pipe(
       map((response) => {
         if (response) {
           return response;

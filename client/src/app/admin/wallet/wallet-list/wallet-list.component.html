@@ -5,6 +5,7 @@
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Points</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -13,6 +14,12 @@
         <td>{{ wallet.firstName }} {{ wallet.lastName }}</td>
         <td>
           {{ wallet.amount }}
+        </td>
+        <td>
+          <i
+            class="fa fa-plus me-4 pointer"
+            (click)="addMoneyToWallet(wallet.id)"
+          ></i>
         </td>
       </tr>
     </tbody>
