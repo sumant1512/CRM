@@ -19,6 +19,7 @@ CREATE TABLE `user` (
   `mobile_number` varchar(100) NOT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
   `role_id` int DEFAULT NULL,
+  `salary` int DEFAULT '0',
   `admin_id` int DEFAULT NULL,
   `transaction_count` int DEFAULT NULL,
   `is_verified` tinyint DEFAULT NULL,
@@ -27,10 +28,10 @@ CREATE TABLE `user` (
   `modified_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
-  KEY `admin_id` (`admin_id`),
+  KEY `user_ibfk_2` (`admin_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`),
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -87,5 +88,6 @@ INSERT INTO expenses_managment.user_role
 
 INSERT INTO expenses_managment.user_role 
     (role_name,created_at,modified_at) VALUE ("employee","2023-12-21 10:27:21.24","2023-12-21 10:27:21.24"); -- To add employee role
-    
+
+
 select * from expense_category;

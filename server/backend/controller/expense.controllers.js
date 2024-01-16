@@ -88,8 +88,10 @@ const addExpense = async (req, res) => {
     const { expenseAmount, categoryId, description, userId, adminId } =
       req.body;
     const roleType = await incrementTransactionCount(userId, adminId, res);
-
     const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+
+    // Begin the transaction
+    await connectDB.query("START TRANSACTION");
 
     if (roleType !== "superadmin") {
       const createExpenseQuery =
@@ -112,32 +114,42 @@ const addExpense = async (req, res) => {
 
       if (roleType === "admin") {
         if (result.length <= 0) {
+          // Rollback the transaction if the first query fails
+          await connectDB.query("ROLLBACK");
           res
             .status(404)
             .send({ status: false, message: "Expense is not added." });
         } else {
+          // Commit the transaction if both queries succeed
+          await connectDB.query("COMMIT");
           res
             .status(200)
             .send({ status: true, message: "Expense added successfully." });
         }
       } else {
         const walletData = [expenseAmount, userId];
-        if (result) {
+        if (result.length > 0) {
           const [walletResult] = await connectDB.query(
             updateWalletQuery,
             walletData
           );
 
           if (walletResult.length <= 0) {
+            // Rollback the transaction if the nested query fails
+            await connectDB.query("ROLLBACK");
             res
               .status(404)
               .send({ status: false, message: "Expense is not added." });
           } else {
+            // Commit the transaction if both queries succeed
+            await connectDB.query("COMMIT");
             res
               .status(200)
               .send({ status: true, message: "Expense added successfully." });
           }
         } else {
+          // Rollback the transaction if the first query fails
+          await connectDB.query("ROLLBACK");
           throw new Error("Fail to add Expenses.");
         }
       }
@@ -149,15 +161,8 @@ const addExpense = async (req, res) => {
       });
     }
   } catch (err) {
-    if (err.message === "Fail to add Expenses.") {
-      res.status(500).send({ status: false, message: "Fail to add Expenses." });
-    } else {
-      sendResponseError(
-        500,
-        "Error in adding expense. Error- " + err.message,
-        res
-      );
-    }
+    console.error(err);
+    sendResponseError(500, "Something went wrong. Please try again", res);
   }
 };
 
@@ -171,6 +176,9 @@ const updateExpense = async (req, res) => {
       userId,
       adminId,
     } = req.body;
+
+    // Begin the transaction
+    await connectDB.query("START TRANSACTION");
 
     const roleType = await incrementTransactionCount(userId, adminId, res);
 
@@ -187,6 +195,8 @@ const updateExpense = async (req, res) => {
       ]);
 
       if (result.length <= 0) {
+        // Rollback the transaction if the first query fails
+        await connectDB.query("ROLLBACK");
         throw new Error("Failed to update expenses.");
       }
 
@@ -204,6 +214,8 @@ const updateExpense = async (req, res) => {
       );
 
       if (updateResult.length <= 0) {
+        // Rollback the transaction if the second query fails
+        await connectDB.query("ROLLBACK");
         res
           .status(404)
           .send({ status: false, message: "Expense is not updated." });
@@ -215,11 +227,15 @@ const updateExpense = async (req, res) => {
         );
 
         if (walletResult) {
+          // Commit the transaction if both queries succeed
+          await connectDB.query("COMMIT");
           res.status(200).send({
             status: true,
             message: "Expense is updated successfully.",
           });
         } else {
+          // Rollback the transaction if the third query fails
+          await connectDB.query("ROLLBACK");
           res
             .status(500)
             .send({ status: false, message: "Failed to update expenses." });
@@ -233,17 +249,8 @@ const updateExpense = async (req, res) => {
       });
     }
   } catch (err) {
-    if (err.message === "Failed to update expenses.") {
-      res
-        .status(500)
-        .send({ status: false, message: "Failed to update expenses." });
-    } else {
-      sendResponseError(
-        500,
-        "Error in updating expense. Error- " + err.message,
-        res
-      );
-    }
+    console.error(err);
+    sendResponseError(500, "Something went wrong. Please try again", res);
   }
 };
 
@@ -282,10 +289,92 @@ const deleteExpenseById = async (req, res) => {
   }
 };
 
+const salaryPayout = async (req, res) => {
+  const adminId = req.params.adminId;
+
+  const getUsersQuery = `SELECT  u.id as user_id, u.admin_id,salary as amount, CONCAT(first_name, ' ', last_name) as description,
+      (SELECT SUM(salary) FROM expenses_managment.user WHERE u.admin_id = ?) as total_amount, t.id as category_id FROM
+      expenses_managment.user as u JOIN expenses_managment.expense_category as t ON u.admin_id = t.admin_id
+    WHERE
+      u.admin_id = ? and t.category_name = "Salary";
+  `;
+  try {
+    // Start the transaction
+    await connectDB.query("START TRANSACTION");
+
+    const [result] = await connectDB.query(getUsersQuery, [adminId, adminId]);
+
+    if (result.length <= 0) {
+      // Rollback the transaction
+      await connectDB.query("ROLLBACK");
+      res
+        .status(500)
+        .send({ status: false, message: "Failed to Payout salary." });
+      return;
+    }
+
+    let total_amount = result[0].total_amount;
+    const expenseAddData = result.map((item) => [
+      item.category_id, // category_id
+      item.user_id,
+      item.admin_id,
+      item.amount,
+      item.description,
+      0, // archived (assuming it's always 0 based on your previous example)
+      new Date(), // current timestamp for created_at
+      new Date(), // current timestamp for modified_at
+    ]);
+
+    const expenseAddQuery = `INSERT INTO expenses_managment.expenses (category_id, user_id, admin_id, expense_amount, description, archived, created_at, modified_at) VALUES ?;`;
+
+    const [insertResult] = await connectDB.query(expenseAddQuery, [
+      expenseAddData,
+    ]);
+
+    if (insertResult.affectedRows <= 0) {
+      // Rollback the transaction
+      await connectDB.query("ROLLBACK");
+      res
+        .status(500)
+        .send({ status: false, message: "Failed to Payout salary." });
+      return;
+    }
+
+    const walletUpdateQuery =
+      "UPDATE expenses_managment.wallet SET amount = amount - ?, modified_at = NOW() WHERE user_id = ? ";
+    const walletData = [total_amount, adminId];
+
+    const [updateResult] = await connectDB.query(walletUpdateQuery, walletData);
+
+    if (updateResult.affectedRows <= 0) {
+      // Rollback the transaction
+      await connectDB.query("ROLLBACK");
+      res
+        .status(500)
+        .send({ status: false, message: "Failed to Payout salary." });
+      return;
+    }
+
+    // Commit the transaction if all queries succeed
+    await connectDB.query("COMMIT");
+    res.status(200).send({ status: true, message: "Salary payout done." });
+  } catch (err) {
+    console.log(err);
+    // Rollback the transaction in case of any error
+    await connectDB.query("ROLLBACK");
+    sendResponseError(
+      500,
+      "Error in salary payout. Error- " + err.message,
+      res
+    );
+  }
+};
+
 module.exports = {
   getExpense,
   addExpense,
   updateExpense,
   getExpenseById,
   deleteExpenseById,
+  salaryPayout,
 };

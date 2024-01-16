@@ -6,6 +6,7 @@ const {
   updateExpense,
   getExpenseById,
   deleteExpenseById,
+  salaryPayout,
 } = require("../controller/expense.controllers");
 const { verifyUser } = require("../middleware/middleware");
 
@@ -15,6 +16,7 @@ router
   .put([verifyUser], updateExpense);
 
 router.route("/:adminId").get([verifyUser], getExpense);
+router.route("/salary/:adminId").get([verifyUser], salaryPayout);
 
 router
   .route("/:id")

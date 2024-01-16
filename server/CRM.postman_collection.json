@@ -323,7 +323,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"admin5@gmail.com\",\r\n    \"new_password\":\"test@12345\",\r\n    \"old_password\":\"test@1234\"\r\n}",
+					"raw": "{\r\n    \"email\":\"kaka@gmail.com\",\r\n    \"newPassword\":\"admins\",\r\n    \"oldPassword\":\"admin\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -352,7 +352,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"admin3@gmail.com\",\r\n    \"new_password\":\"test@123\",\r\n    \"old_password\":\"aCi16yI@\"\r\n}",
+							"raw": "{\r\n    \"email\":\"kaka@gmail.com\",\r\n    \"newPassword\":\"admins\",\r\n    \"oldPassword\":\"admin\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -373,9 +373,9 @@
 							]
 						}
 					},
-					"status": "Internal Server Error",
-					"code": 500,
-					"_postman_previewlanguage": "html",
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
 					"header": [
 						{
 							"key": "X-Powered-By",
@@ -387,19 +387,19 @@
 						},
 						{
 							"key": "Content-Type",
-							"value": "text/html; charset=utf-8"
+							"value": "application/json; charset=utf-8"
 						},
 						{
 							"key": "Content-Length",
-							"value": "109"
+							"value": "59"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"6d-Mw9BzQvwFssga5bB5XVzHQrHM9g\""
+							"value": "W/\"3b-NjVQGw49+OoFcSXaIkLt5FKOZKY\""
 						},
 						{
 							"key": "Date",
-							"value": "Fri, 29 Dec 2023 16:35:13 GMT"
+							"value": "Tue, 16 Jan 2024 18:20:30 GMT"
 						},
 						{
 							"key": "Connection",
@@ -411,7 +411,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "Unable to reset the password. Error- undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+					"body": "{\n    \"status\": true,\n    \"message\": \"Password is reset successfully.\"\n}"
 				}
 			]
 		},
@@ -1325,6 +1325,14 @@
 					"body": "{\n    \"status\": true,\n    \"message\": \"Expense added successfully.\"\n}"
 				}
 			]
+		},
+		{
+			"name": "Salary Payout",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		},
 		{
 			"name": "Update Expense",

@@ -17,13 +17,19 @@ const registerUser = async (req, res) => {
     req.body;
 
   let expectedRoleId = null;
+  let salary 
   if (roleId == 2) {
     expectedRoleId = 1;
   } else if (roleId == 3) {
     expectedRoleId = 2;
+    salary = req.body.salary
   }
 
   try {
+    // Start the transaction
+    await connectDB.query("START TRANSACTION");
+
+    // Check if the admin role is as expected
     const checkRoleIdQuery =
       "SELECT role_id FROM expenses_managment.user WHERE id=? and role_id =?";
     const [roleCheckResult] = await connectDB.query(checkRoleIdQuery, [
@@ -35,12 +41,15 @@ const registerUser = async (req, res) => {
       const passwordHash = await bcrypt.hash("admin", 8);
       const currentDateTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
+      // Check if the email already exists
       const checkEmailQuery =
         "SELECT COUNT(*) as count FROM expenses_managment.user WHERE email = ?";
       const [emailCheckResult] = await connectDB.query(checkEmailQuery, email);
       const emailExists = emailCheckResult[0].count > 0;
 
       if (emailExists) {
+        // Rollback the transaction
+        await connectDB.query("ROLLBACK");
         return res.status(400).send({
           status: false,
           message: "Email already exists. Please choose another email.",
@@ -55,6 +64,7 @@ const registerUser = async (req, res) => {
           mobileNumber,
           0,
           roleId,
+          salary,
           adminId,
           trans_count,
           0,
@@ -62,24 +72,30 @@ const registerUser = async (req, res) => {
           currentDateTime,
         ];
 
+        // Insert the user data
         const registerQuery =
-          "INSERT INTO expenses_managment.user (first_name, last_name, email, password, mobile_number, is_active, role_id, admin_id, transaction_count, is_verified, created_at, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "INSERT INTO expenses_managment.user (first_name, last_name, email, password, mobile_number, is_active, role_id, salary, admin_id, transaction_count, is_verified, created_at, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const [registerResult] = await connectDB.query(registerQuery, userData);
 
         if (registerResult && registerResult.insertId) {
           if (roleId != 1) {
+            // Insert the wallet data for non-superadmin users
             const [walletResult] = await connectDB.query(
               "INSERT IGNORE INTO expenses_managment.wallet (user_id, amount, created_at, modified_at, admin_id) VALUES (?, ?, NOW(), NOW(), ?)",
               [registerResult.insertId, 0, adminId]
             );
 
             if (walletResult.affectedRows === 1) {
+              // Commit the transaction if both queries succeed
+              await connectDB.query("COMMIT");
               return res.status(201).send({
                 status: true,
                 message: "Successfully account registered.",
                 data: {},
               });
             } else {
+              // Commit the transaction if wallet insertion fails
+              await connectDB.query("COMMIT");
               return res.status(201).send({
                 status: true,
                 message:
@@ -88,6 +104,8 @@ const registerUser = async (req, res) => {
               });
             }
           } else {
+            // Commit the transaction for superadmin user
+            await connectDB.query("COMMIT");
             return res.status(201).send({
               status: true,
               message: "Successfully superadmin registered.",
@@ -95,6 +113,8 @@ const registerUser = async (req, res) => {
             });
           }
         } else {
+          // Rollback the transaction if user insertion fails
+          await connectDB.query("ROLLBACK");
           return res.status(500).send({
             status: false,
             message: "User not registered.",
@@ -102,14 +122,18 @@ const registerUser = async (req, res) => {
         }
       }
     } else {
+      // Rollback the transaction if admin role check fails
+      await connectDB.query("ROLLBACK");
       return res.status(400).send({
         status: false,
         message:
-          "Admin can be registered by superadmin, and employee can be added by admin.",
+          "Admin can be registered by superadmin, and an employee can be added by admin.",
       });
     }
   } catch (err) {
-    console.log(err);
+    // Rollback the transaction in case of any other error
+    await connectDB.query("ROLLBACK");
+    console.error(err);
     return res.status(500).send({
       status: false,
       message: "User not registered. Please check the error: " + err,
@@ -120,14 +144,19 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const loginQuery =
-    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive, mobile_number as phone  FROM expenses_managment.user WHERE email=?";
+    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, salary, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive, mobile_number as phone  FROM expenses_managment.user WHERE email=?";
   const updateLoginLoggedQuery =
-    "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
+    "UPDATE expenses_managment.user SET logged_in=?, modified_at = NOW() WHERE id=?";
 
   try {
+    // Start the transaction
+    await connectDB.query("START TRANSACTION");
+
     const [result] = await connectDB.query(loginQuery, [email]);
 
     if (result.length <= 0) {
+      // Rollback the transaction
+      await connectDB.query("ROLLBACK");
       return res.status(404).send({
         status: false,
         message: "User is not registered",
@@ -135,6 +164,8 @@ const loginUser = async (req, res) => {
     }
 
     if (result[0].isActive == 0) {
+      // Rollback the transaction
+      await connectDB.query("ROLLBACK");
       const response = {
         id: result[0].id,
         email: result[0].email,
@@ -152,6 +183,8 @@ const loginUser = async (req, res) => {
     }
 
     if (result[0].isVerified == 0) {
+      // Rollback the transaction
+      await connectDB.query("ROLLBACK");
       const response = {
         id: result[0].id,
         email: result[0].email,
@@ -173,12 +206,15 @@ const loginUser = async (req, res) => {
       const authToken = newToken(result[0]);
       delete result[0].password;
 
+      // Update the login status
       const [updateResult] = await connectDB.query(updateLoginLoggedQuery, [
         1,
         result[0].id,
       ]);
 
       if (updateResult && updateResult.affectedRows === 1) {
+        // Commit the transaction if both queries succeed
+        await connectDB.query("COMMIT");
         return res.status(200).send({
           status: true,
           message: "User logged in successfully",
@@ -187,19 +223,25 @@ const loginUser = async (req, res) => {
           isVerified: result[0].isVerified,
         });
       } else {
+        // Rollback the transaction if update query fails
+        await connectDB.query("ROLLBACK");
         return res.status(404).send({
           status: false,
           message: "Unable to update the login status.",
         });
       }
     } else {
+      // Rollback the transaction if password comparison fails
+      await connectDB.query("ROLLBACK");
       return res.status(401).send({
         status: false,
         message: "Incorrect Email or Password.",
       });
     }
   } catch (err) {
-    console.log(err);
+    // Rollback the transaction in case of any other error
+    await connectDB.query("ROLLBACK");
+    console.error(err);
     return res.status(500).send({
       status: false,
       message: "Error in Logging in. Please try after some time",
@@ -353,6 +395,8 @@ const activateUser = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { email, newPassword, oldPassword } = req.body;
+
+  console.log(email, newPassword, oldPassword)
 
   const resetPasswordQuery =
     "UPDATE expenses_managment.user SET password=?, is_verified=?, modified_at = NOW() WHERE email=?";
