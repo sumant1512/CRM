@@ -20,9 +20,9 @@ const verifyUser = async (req, res, next) => {
     const payload = await verifyToken(authorization.split(" ")[1]);
     if (payload) {
       const checkUserQuery =
-        "SELECT COUNT(*) as count FROM expenses_managment.user WHERE id = ? and logged_in = ?";
+        "SELECT COUNT(*) as count FROM expenses_managment.user WHERE id = ? and auth_token=?";
       connectDB
-        .query(checkUserQuery, [payload["id"], 1])
+        .query(checkUserQuery, [payload["id"], authorization.split(" ")[1]])
         .then(([rows]) => {
           const userExists = rows[0].count > 0;
 

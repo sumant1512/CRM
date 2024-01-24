@@ -144,9 +144,9 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const loginQuery =
-    "SELECT id, first_name as firstName, last_name as lastName, email, password, role_id as roleId, admin_id as adminId, salary, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive, mobile_number as phone  FROM expenses_managment.user WHERE email=?";
+    "SELECT id, password, is_verified as isVerified, is_active as isActive, role_id as roleId  FROM expenses_managment.user WHERE email=?";
   const updateLoginLoggedQuery =
-    "UPDATE expenses_managment.user SET logged_in=?, modified_at = NOW() WHERE id=?";
+    "UPDATE expenses_managment.user SET auth_token=?, modified_at = NOW() WHERE id=?";
 
   try {
     // Start the transaction
@@ -168,11 +168,6 @@ const loginUser = async (req, res) => {
       await connectDB.query("ROLLBACK");
       const response = {
         id: result[0].id,
-        email: result[0].email,
-        adminId: result[0].adminId,
-        firstName: result[0].firstName,
-        lastName: result[0].lastName,
-        roleId: result[0].roleId,
         isActive: false,
       };
       return res.status(401).send({
@@ -187,10 +182,6 @@ const loginUser = async (req, res) => {
       await connectDB.query("ROLLBACK");
       const response = {
         id: result[0].id,
-        email: result[0].email,
-        firstName: result[0].firstName,
-        lastName: result[0].lastName,
-        roleId: result[0].roleId,
         isVerified: false,
       };
       return res.status(401).send({
@@ -208,7 +199,7 @@ const loginUser = async (req, res) => {
 
       // Update the login status
       const [updateResult] = await connectDB.query(updateLoginLoggedQuery, [
-        1,
+        authToken,
         result[0].id,
       ]);
 
@@ -218,9 +209,7 @@ const loginUser = async (req, res) => {
         return res.status(200).send({
           status: true,
           message: "User logged in successfully",
-          data: result[0],
-          authToken: authToken,
-          isVerified: result[0].isVerified,
+          authToken: authToken
         });
       } else {
         // Rollback the transaction if update query fails
@@ -245,6 +234,37 @@ const loginUser = async (req, res) => {
     return res.status(500).send({
       status: false,
       message: "Error in Logging in. Please try after some time",
+    });
+  }
+};
+
+const getUserProfile = async (req, res) => {
+  const userId = req.params.id; // Assuming you get user ID from the request parameters
+  console.log(userId)
+  const userProfileQuery =
+    "SELECT id, first_name as firstName, last_name as lastName, email, role_id as roleId, admin_id as adminId, salary, transaction_count as transactionCount, is_verified as isVerified, is_active as isActive, mobile_number as phone  FROM expenses_managment.user WHERE id=?";
+
+  try {
+    const [result] = await connectDB.query(userProfileQuery, [userId]);
+
+    if (result.length <= 0) {
+      return res.status(404).send({
+        status: false,
+        message: "User not found",
+      });
+    }
+
+
+    return res.status(200).send({
+      status: true,
+      message: "User profile retrieved successfully",
+      data: result[0]
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({
+      status: false,
+      message: "Error in retrieving user profile. Please try after some time",
     });
   }
 };
@@ -498,8 +518,8 @@ const logout = async (req, res) => {
   const user_id = req.params.id;
 
   const userLogoutQuery =
-    "UPDATE expenses_managment.user SET logged_in=?,modified_at = NOW() WHERE id=?";
-  userLogoutData = [0, user_id];
+    "UPDATE expenses_managment.user SET auth_token=?,modified_at = NOW() WHERE id=?";
+  userLogoutData = [null, user_id];
 
   try {
     connectDB.query(userLogoutQuery, userLogoutData).then(([result]) => {
@@ -530,4 +550,5 @@ module.exports = {
   getUserById,
   logout,
   getPointByUserId,
+  getUserProfile,
 };

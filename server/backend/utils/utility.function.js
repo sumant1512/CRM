@@ -30,7 +30,7 @@ const checkPassword = (password, passwordHash) => {
 };
 
 const newToken = (user) => {
-  return jwt.sign({ id: user.id }, JWT.jwt, {
+  return jwt.sign({ id: user.id, roleId: user.roleId }, JWT.jwt, {
     expiresIn: JWT.jwtExp,
   });
 };

@@ -721,6 +721,99 @@
 			]
 		},
 		{
+			"name": "User Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcwNjEyNDYzNSwiZXhwIjoxNzE0NzY0NjM1fQ.bUJCQiJ11Y66Ce0kjdRgYL2xj182QL661P4tysl4n4g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/profile/24",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"profile",
+						"24"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "User Profile",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/profile/24",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"profile",
+								"24"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "256"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"100-nRVI/XNbxeyjrBWgise2YwkylZw\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 Jan 2024 19:38:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"User profile retrieved successfully\",\n    \"data\": {\n        \"id\": 24,\n        \"firstName\": \"manager\",\n        \"lastName\": \"manager\",\n        \"email\": \"manager@gmail.com\",\n        \"roleId\": 2,\n        \"adminId\": 23,\n        \"salary\": 0,\n        \"transactionCount\": 4,\n        \"isVerified\": 1,\n        \"isActive\": 1,\n        \"phone\": \"9856324578\"\n    }\n}"
+				}
+			]
+		},
+		{
 			"name": "Get Point By User",
 			"request": {
 				"auth": {

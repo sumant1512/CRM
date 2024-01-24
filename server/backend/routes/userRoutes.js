@@ -9,15 +9,18 @@ const {
   getAllAdmin,
   logout,
   getPointByUserId,
+  getUserProfile,
 } = require("../controller/user.controller");
 const { verifyUser } = require("../middleware/middleware");
 const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/admins", getAllAdmin);
+router.route("/profile/:id").get([verifyUser], getUserProfile);
 
+router.get("/admins", getAllAdmin);
 router.route("/activate/:id").put([verifyUser], activateUser);
+
 
 router.route("/reset-password").post([], resetPassword);
 
