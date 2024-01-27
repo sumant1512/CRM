@@ -14,7 +14,7 @@ const getExpense = async (req, res) => {
      user_id as userId, first_name as firstName, last_name as lastName, expenses.admin_id as adminId,\
       description, expense_amount as expenseAmount, archived, expenses.created_at as createdAt FROM expenses\
       LEFT JOIN user ON user.id = expenses.user_id\
-      LEFT JOIN expense_category on expenses.category_id = expense_category.id where expenses.admin_id =? and archived = 0";
+      LEFT JOIN expense_category on expenses.category_id = expense_category.id where expenses.admin_id =? and archived = 0 and expense_category.category_name != 'Salary'";
   const getAllExpenseData = [adminId];
 
   try {
